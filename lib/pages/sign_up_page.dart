@@ -13,7 +13,7 @@ class SignUpPage extends StatelessWidget {
         child: Center(
           child: Padding(
             child: Column(
-              children: _buildColumnItems(),
+              children: _buildColumnItems(context),
               mainAxisAlignment: MainAxisAlignment.center,
             ),
             padding: EdgeInsets.all(dimens.insetL),
@@ -23,9 +23,12 @@ class SignUpPage extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildColumnItems() {
+  List<Widget> _buildColumnItems(BuildContext context) {
     return [
-      Text(strings.createYourAccount),
+      Text(
+        strings.createYourAccount,
+        style: Theme.of(context).textTheme.headline3,
+      ),
       SizedBox(height: 40),
       Row(children: [Text(strings.username)]),
       TextFormField(),

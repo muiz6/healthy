@@ -13,7 +13,7 @@ class SignInPage extends StatelessWidget {
         child: Center(
           child: Padding(
             child: Column(
-              children: _buildColumnItems(),
+              children: _buildColumnItems(context),
               mainAxisAlignment: MainAxisAlignment.center,
             ),
             padding: EdgeInsets.all(dimens.insetL),
@@ -23,9 +23,9 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildColumnItems() {
+  List<Widget> _buildColumnItems(BuildContext context) {
     return [
-      Text(strings.welcomeBack),
+      Text(strings.welcomeBack, style: Theme.of(context).textTheme.headline3),
       SizedBox(height: 40),
       Row(children: [Text(strings.eMail)]),
       TextFormField(),
@@ -33,13 +33,13 @@ class SignInPage extends StatelessWidget {
       Row(children: [Text(strings.password)]),
       TextFormField(obscureText: true),
       SizedBox(height: 40),
-      _signInMsg(),
+      _signUpMsg(),
       SizedBox(height: 40),
       ElevatedButton(onPressed: () {}, child: Text(strings.signIn)),
     ];
   }
 
-  Widget _signInMsg() {
+  Widget _signUpMsg() {
     return Row(
       children: [
         Text(strings.dontHaveAnAccount),
