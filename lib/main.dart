@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import 'package:healthy/pages/sign_in_page.dart';
 import 'package:healthy/strings.dart' as strings;
-import 'package:healthy/pages/sign_up.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: strings.appName,
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: SignUpPage(),
+      theme: ThemeData(primarySwatch: Colors.indigo),
+      home: SignInPage(),
     );
   }
 }

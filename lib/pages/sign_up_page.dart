@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:healthy/dimens.dart' as dimens;
+import 'package:healthy/pages/sign_in_page.dart';
 import 'package:healthy/strings.dart' as strings;
 
 class SignUpPage extends StatelessWidget {
@@ -44,7 +46,10 @@ class SignUpPage extends StatelessWidget {
     return Row(
       children: [
         Text(strings.haveAnAccount),
-        TextButton(onPressed: () {}, child: Text(strings.signIn)),
+        TextButton(
+          onPressed: () => Get.offAll(SignInPage()),
+          child: Text(strings.signIn),
+        ),
       ],
       mainAxisAlignment: MainAxisAlignment.center,
     );
