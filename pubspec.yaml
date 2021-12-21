@@ -27,8 +27,10 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  camera: ^0.9.4+5
   flutter:
     sdk: flutter
+  flutter_svg: ^1.0.0
   get: ^4.5.1
 
 dev_dependencies:
@@ -58,6 +60,9 @@ flutter:
     - assets/img/person.jpg
     - assets/img/plant.jpg
     - assets/img/product.jpg
+
+    - assets/svg/face_guide.svg
+    - assets/svg/hair_guide.svg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
