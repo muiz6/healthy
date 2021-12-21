@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:healthy/dimens.dart' as dimens;
+import 'package:healthy/pages/selection_page.dart';
 import 'package:healthy/pages/sign_up_page.dart';
 import 'package:healthy/strings.dart' as strings;
 
@@ -35,7 +36,12 @@ class SignInPage extends StatelessWidget {
       SizedBox(height: 40),
       _signUpMsg(),
       SizedBox(height: 40),
-      ElevatedButton(onPressed: () {}, child: Text(strings.signIn)),
+      ElevatedButton(
+        onPressed: () => Get.offAll(SelectionPage()),
+        child: Text(
+          strings.signIn,
+        ),
+      ),
     ];
   }
 

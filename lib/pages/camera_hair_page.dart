@@ -15,7 +15,9 @@ class _CameraHairPageState extends State<CameraHairPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        foregroundColor: Colors.white,
+      ),
       body: Stack(
         fit: StackFit.expand,
         children: [

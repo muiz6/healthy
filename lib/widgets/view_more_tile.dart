@@ -17,39 +17,42 @@ class ViewMoreTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        child: Row(
-          children: [
-            Container(
-              height: 100,
-              width: 100,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(imageAssetName),
+    return GestureDetector(
+      child: Card(
+        child: Padding(
+          child: Row(
+            children: [
+              Container(
+                height: 100,
+                width: 100,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(imageAssetName),
+                  ),
+                  shape: BoxShape.circle,
                 ),
-                shape: BoxShape.circle,
               ),
-            ),
-            SizedBox(
-              width: dimens.insetM,
-            ),
-            Expanded(
-              child: Text(
-                title,
-                style: Theme.of(context).textTheme.headline3?.copyWith(
-                      fontWeight: FontWeight.normal,
-                    ),
+              SizedBox(
+                width: dimens.insetM,
               ),
-            ),
-            Icon(
-              Icons.keyboard_arrow_right,
-              size: 40,
-            ),
-          ],
+              Expanded(
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.headline3?.copyWith(
+                        fontWeight: FontWeight.normal,
+                      ),
+                ),
+              ),
+              Icon(
+                Icons.keyboard_arrow_right,
+                size: 40,
+              ),
+            ],
+          ),
+          padding: EdgeInsets.all(dimens.insetM),
         ),
-        padding: EdgeInsets.all(dimens.insetM),
       ),
+      onTap: onClick,
     );
   }
 }
