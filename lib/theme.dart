@@ -14,6 +14,21 @@ final appTheme = ThemeData.from(
       )),
     ),
   ),
+  cardTheme: CardTheme(
+    margin: EdgeInsets.zero,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(dimens.radiusM),
+    ),
+  ),
+  appBarTheme: AppBarTheme(
+    centerTitle: true,
+    backgroundColor: Colors.transparent,
+    elevation: 0,
+    titleTextStyle: _textTheme.headline3?.copyWith(
+      color: _colorScheme.onBackground,
+    ),
+    foregroundColor: _colorScheme.onBackground,
+  ),
 );
 
 const _colorScheme = ColorScheme.light(
@@ -25,6 +40,10 @@ const _colorScheme = ColorScheme.light(
 const _textTheme = TextTheme(
   headline3: TextStyle(
     fontSize: 22,
+    fontWeight: FontWeight.bold,
+  ),
+  headline4: TextStyle(
+    fontSize: 18,
     fontWeight: FontWeight.bold,
   ),
 );
