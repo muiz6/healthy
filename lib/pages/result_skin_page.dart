@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:healthy/dimens.dart' as dimens;
 import 'package:healthy/strings.dart' as strings;
-import 'package:healthy/widgets/my_list_tile.dart';
 import 'package:healthy/widgets/view_more_tile.dart';
 
 class ResultSkinPage extends StatelessWidget {
@@ -62,6 +61,13 @@ class ResultSkinPage extends StatelessWidget {
                 imageAssetName: 'assets/img/person.jpg',
                 title: 'Dermatologies',
                 subtitle: 'Need expert advice?',
+              ),
+              SizedBox(
+                height: dimens.insetL,
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                child: Text('View Reports'),
               ),
             ],
             crossAxisAlignment: CrossAxisAlignment.stretch,
