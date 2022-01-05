@@ -60,6 +60,8 @@ flutter:
     - assets/img/person.jpg
     - assets/img/plant.jpg
     - assets/img/product.jpg
+    - assets/img/man.jpg
+    - assets/img/woman.jpeg
 
     - assets/svg/face_guide.svg
     - assets/svg/hair_guide.svg
