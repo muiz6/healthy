@@ -1,4 +1,5 @@
 from flask import Flask
+from dotenv import load_dotenv
 
 from blueprints.users import users
 
