@@ -16,12 +16,12 @@ def post_user():
     return {'message': 'Something went wrong!'}
 
 
-@users.route('/users/login', methods=['POST'])
+@users.route('/users/login/', methods=['POST'])
 def post_user_login():
     email, password = request.form['email'], request.form['password']
     if (email and password):
         readUser = user.read_user(email)
-        if password == readUser['password']:
+        if password == readUser.pop('password', None):
             return readUser
 
     return {'message': 'Invalid credentials'}

@@ -6,7 +6,7 @@ from services.env import config
 dbconfig = {
     'host': 'localhost',
     'user': 'root',
-    'passwd': f'{config["DB_PASS"]}',
+    'passwd': config["DB_PASS"],
     'database': 'healthy',
 }
 
