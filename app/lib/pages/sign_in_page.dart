@@ -4,9 +4,13 @@ import 'package:get/get.dart';
 import 'package:healthy/dimens.dart' as dimens;
 import 'package:healthy/pages/selection_page.dart';
 import 'package:healthy/pages/sign_up_page.dart';
+import 'package:healthy/services/repository.dart' as repository;
 import 'package:healthy/strings.dart' as strings;
 
 class SignInPage extends StatelessWidget {
+  final emailCtrl = TextEditingController();
+  final pwdCtrl = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,17 +33,21 @@ class SignInPage extends StatelessWidget {
       Text(strings.welcomeBack, style: Theme.of(context).textTheme.headline3),
       SizedBox(height: 40),
       Row(children: [Text(strings.eMail)]),
-      TextFormField(),
+      TextFormField(
+        controller: emailCtrl,
+      ),
       SizedBox(height: dimens.insetL),
       Row(children: [Text(strings.password)]),
-      TextFormField(obscureText: true),
+      TextFormField(controller: pwdCtrl, obscureText: true),
       SizedBox(height: 40),
       _signUpMsg(),
       SizedBox(height: 40),
-      ElevatedButton(
-        onPressed: () => Get.offAll(SelectionPage()),
-        child: Text(
-          strings.signIn,
+      Builder(
+        builder: (builderContext) => ElevatedButton(
+          onPressed: () => _onSignIn(builderContext),
+          child: Text(
+            strings.signIn,
+          ),
         ),
       ),
     ];
@@ -56,5 +64,21 @@ class SignInPage extends StatelessWidget {
       ],
       mainAxisAlignment: MainAxisAlignment.center,
     );
+  }
+
+  _onSignIn(context) async {
+    var successful = false;
+    try {
+      final result = await repository.signIn(emailCtrl.text, pwdCtrl.text);
+      if (result != null) {
+        successful = true;
+        Get.offAll(SelectionPage());
+      }
+    } catch (e) {}
+    if (!successful) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Something went wrong'),
+      ));
+    }
   }
 }
