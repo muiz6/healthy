@@ -17,8 +17,8 @@ class SplashPage extends StatelessWidget {
   void _afterBuild(Duration duration) async {
     final user = await repository.getUser();
     if (user != null) {
-      return Get.to(SelectionPage());
+      return Get.offAll(SelectionPage());
     }
-    return Get.to(SignInPage());
+    return Get.offAll(SignInPage());
   }
 }

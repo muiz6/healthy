@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 const keyName = 'name';
 const keyEmail = 'email';
 
-saveUser(Map<String, String> user) async {
+saveUser(Map<String, dynamic> user) async {
   final sharedPref = await SharedPreferences.getInstance();
   sharedPref.setString(keyName, user['name']!);
   sharedPref.setString(keyEmail, user['email']!);

@@ -66,11 +66,14 @@ class SignInPage extends StatelessWidget {
     var successful = false;
     try {
       final result = await repository.signIn(emailCtrl.text, pwdCtrl.text);
+      print(result);
       if (result != null) {
         successful = true;
         Get.offAll(SelectionPage());
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
     if (!successful) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Something went wrong'),
