@@ -6,6 +6,7 @@ import 'package:healthy/pages/selection_page.dart';
 import 'package:healthy/pages/sign_up_page.dart';
 import 'package:healthy/services/repository.dart' as repository;
 import 'package:healthy/strings.dart' as strings;
+import 'package:healthy/widgets/scrollable_body.dart';
 
 class SignInPage extends StatelessWidget {
   final emailCtrl = TextEditingController();
@@ -14,15 +15,10 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Padding(
-            child: Column(
-              children: _buildColumnItems(context),
-              mainAxisAlignment: MainAxisAlignment.center,
-            ),
-            padding: EdgeInsets.all(dimens.insetL),
-          ),
+      body: ScrollableBody(
+        child: Column(
+          children: _buildColumnItems(context),
+          mainAxisAlignment: MainAxisAlignment.center,
         ),
       ),
     );
