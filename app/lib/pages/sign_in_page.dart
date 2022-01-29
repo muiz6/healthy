@@ -6,19 +6,24 @@ import 'package:healthy/pages/selection_page.dart';
 import 'package:healthy/pages/sign_up_page.dart';
 import 'package:healthy/services/repository.dart' as repository;
 import 'package:healthy/strings.dart' as strings;
+import 'package:healthy/util/validators.dart' as validators;
 import 'package:healthy/widgets/scrollable_body.dart';
 
 class SignInPage extends StatelessWidget {
   final emailCtrl = TextEditingController();
+  final formKey = GlobalKey<FormState>();
   final pwdCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ScrollableBody(
-        child: Column(
-          children: _buildColumnItems(context),
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Form(
+          child: Column(
+            children: _buildColumnItems(context),
+            mainAxisAlignment: MainAxisAlignment.center,
+          ),
+          key: formKey,
         ),
       ),
     );
@@ -31,10 +36,15 @@ class SignInPage extends StatelessWidget {
       Row(children: [Text(strings.eMail)]),
       TextFormField(
         controller: emailCtrl,
+        validator: validators.validateEmail,
       ),
       SizedBox(height: dimens.insetL),
       Row(children: [Text(strings.password)]),
-      TextFormField(controller: pwdCtrl, obscureText: true),
+      TextFormField(
+        controller: pwdCtrl,
+        obscureText: true,
+        validator: validators.validatePassword,
+      ),
       SizedBox(height: 40),
       _signUpMsg(),
       SizedBox(height: 40),
@@ -63,21 +73,20 @@ class SignInPage extends StatelessWidget {
   }
 
   _onSignIn(context) async {
-    var successful = false;
-    try {
-      final result = await repository.signIn(emailCtrl.text, pwdCtrl.text);
-      print(result);
-      if (result != null) {
-        successful = true;
-        Get.offAll(SelectionPage());
+    if (formKey.currentState?.validate() ?? false) {
+      var successful = false;
+      try {
+        final result = await repository.signIn(emailCtrl.text, pwdCtrl.text);
+        if (result != null) {
+          successful = true;
+          Get.offAll(SelectionPage());
+        }
+      } catch (e) {}
+      if (!successful) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Something went wrong'),
+        ));
       }
-    } catch (e) {
-      print(e);
-    }
-    if (!successful) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Something went wrong'),
-      ));
     }
   }
 }
