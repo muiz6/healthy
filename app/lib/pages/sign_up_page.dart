@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:healthy/dimens.dart' as dimens;
+import 'package:healthy/pages/selection_page.dart';
 import 'package:healthy/pages/sign_in_page.dart';
+import 'package:healthy/services/repository.dart' as repository;
 import 'package:healthy/strings.dart' as strings;
 import 'package:healthy/widgets/scrollable_body.dart';
 
 class SignUpPage extends StatelessWidget {
+  final emailCtrl = TextEditingController();
+  final nameCtrl = TextEditingController();
+  final pwdCtrl = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,17 +33,27 @@ class SignUpPage extends StatelessWidget {
       ),
       SizedBox(height: 40),
       Row(children: [Text(strings.username)]),
-      TextFormField(),
+      TextFormField(controller: nameCtrl),
       SizedBox(height: dimens.insetL),
       Row(children: [Text(strings.eMail)]),
-      TextFormField(),
+      TextFormField(controller: emailCtrl),
       SizedBox(height: dimens.insetL),
       Row(children: [Text(strings.password)]),
-      TextFormField(obscureText: true),
+      TextFormField(
+        controller: pwdCtrl,
+        obscureText: true,
+      ),
       SizedBox(height: 40),
       _signInMsg(),
       SizedBox(height: 40),
-      ElevatedButton(onPressed: () {}, child: Text('Sign Up')),
+      Builder(
+        builder: (builderContext) => ElevatedButton(
+          onPressed: () => _onSignUp(builderContext),
+          child: Text(
+            strings.signUp,
+          ),
+        ),
+      ),
     ];
   }
 
@@ -52,5 +68,22 @@ class SignUpPage extends StatelessWidget {
       ],
       mainAxisAlignment: MainAxisAlignment.center,
     );
+  }
+
+  _onSignUp(context) async {
+    var successful = false;
+    try {
+      final result =
+          await repository.signUp(nameCtrl.text, emailCtrl.text, pwdCtrl.text);
+      if (result != null) {
+        successful = true;
+        Get.offAll(SelectionPage());
+      }
+    } catch (e) {}
+    if (!successful) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Something went wrong'),
+      ));
+    }
   }
 }
