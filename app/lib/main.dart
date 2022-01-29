@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:healthy/pages/sign_in_page.dart';
+import 'package:healthy/pages/splash_page.dart';
 import 'package:healthy/strings.dart' as strings;
 import 'package:healthy/theme.dart' as theme;
 
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: strings.appName,
       theme: theme.appTheme,
-      home: SignInPage(),
+      home: SplashPage(),
     );
   }
 }
