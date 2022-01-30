@@ -1,4 +1,3 @@
-from os import environ
 from services.mysql import connection_pool
 
 

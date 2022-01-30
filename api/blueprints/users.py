@@ -9,7 +9,7 @@ users = Blueprint('users', __name__)
 @users.route('/users/', methods=['POST'])
 def post_user():
     name, email, password = request.form['name'], request.form['email'], request.form['password']
-    if (name and email and password):
+    if name and email and password:
         user.create_user(email, name, password)
         return {'email': email, 'name': name}
 
@@ -18,10 +18,10 @@ def post_user():
 
 @users.route('/users/login/', methods=['POST'])
 def post_user_login():
-    email, password = request.form['email'], request.form['password']
-    if (email and password):
+    email, password = request.form.get('email'), request.form.get('password')
+    if email and password:
         readUser = user.read_user(email)
         if password == readUser.pop('password', None):
             return readUser
 
-    return {'message': 'Invalid credentials'}
+    return {'message': 'Invalid credentials'}, 403
