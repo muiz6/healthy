@@ -4,8 +4,8 @@ from services.mysql import connection_pool
 def create_user(email, name, password):
     cursor = connection_pool.cursor()
     create_table(cursor)
-    result = cursor.execute('INSERT INTO users(email, name, password) VALUES(%s, %s, %s)',
-                            (email, name, password))
+    cursor.execute('INSERT INTO users(email, name, password) VALUES(%s, %s, %s)',
+                   (email, name, password))
     connection_pool.commit()
     cursor.close()
 
