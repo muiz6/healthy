@@ -1,8 +1,10 @@
 import os
+import sys
 
 from flask import Blueprint, request
 
 import services.image_processor as image_processor
+import models.report as report
 
 
 reports = Blueprint('reports', __name__)
@@ -20,10 +22,11 @@ def post_skin():
 
 
 def create_report(sample):
-    email, picture = request.form.get('email'), request.files.get('picture')
-    if email and picture:
+    user_id = request.form.get('user_id')
+    picture = request.files.get('picture')
+    if user_id and picture:
         _, extension = os.path.splitext(picture.filename)
-        file_name = f'1{extension}'
+        file_name = f'{report.read_report_count() + 1}{extension}'
         picture.save(os.path.join(os.getcwd(), UPLOAD_FOLDER, file_name))
 
         if sample == 'hair':
@@ -32,8 +35,13 @@ def create_report(sample):
             result = image_processor.process_skin(picture)
 
         response = result.copy()
-        response['email'] = email
+        response['image'] = file_name
+        response['user_id'] = user_id
         response['sample'] = sample
+
+        report.create_report(response)
+        response['image_url'] = f'{request.root_url}images/{response.pop("image", "#")}'
+
         return response
 
     return {'message': 'Something went wrong!'}, 400

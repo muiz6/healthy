@@ -4,7 +4,7 @@ from services.mysql import connection_pool
 def create_user(email, name, password):
     cursor = connection_pool.cursor()
     create_table(cursor)
-    cursor.execute('INSERT INTO users(email, name, password) VALUES(%s, %s, %s)',
+    cursor.execute('INSERT INTO users(email, name, password) VALUES(%s, %s, %s);',
                    (email, name, password))
     connection_pool.commit()
     cursor.close()
@@ -14,7 +14,7 @@ def read_user(email):
     cursor = connection_pool.cursor()
     create_table(cursor)
     cursor.execute(
-        'SELECT * FROM users WHERE email=%s', (email,))
+        'SELECT * FROM users WHERE email=%s;', (email,))
     id, email, name, password = cursor.fetchone()
     cursor.close()
     return {
