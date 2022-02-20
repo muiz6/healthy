@@ -1,14 +1,13 @@
 import os
-import sys
 
 from flask import Blueprint, request
 
+from constants import UPLOAD_FOLDER
 import services.image_processor as image_processor
 import models.report as report
 
 
 reports = Blueprint('reports', __name__)
-UPLOAD_FOLDER = 'uploads'
 
 
 @reports.route('/reports/hair/', methods=['POST'])
@@ -54,7 +53,7 @@ def get_reports():
         result = report.read_reports(user_id)
 
         return {
-            'base_image_url': request.root_url,
+            'base_image_url': f'{request.root_url}images/',
             'reports': result
         }
 
