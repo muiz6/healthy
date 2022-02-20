@@ -4,8 +4,10 @@ from services.mysql import connection_pool
 def create_report(report):
     cursor = connection_pool.cursor()
     create_tables(cursor)
-    cursor.execute('INSERT INTO reports(user_id, image, remarks, sample) VALUES(%s, %s, %s, %s);',
-                   (report['user_id'], report['image'], report['remarks'], report['sample']))
+    cursor.execute('INSERT INTO reports(user_id, image, health, remarks, sample) '
+                   'VALUES(%s, %s, %s, %s, %s);',
+                   (report['user_id'], report['image'], report['health'], report['remarks'],
+                    report['sample']))
 
     report_id = cursor.lastrowid
 
@@ -26,6 +28,7 @@ def create_tables(cursor):
                     id INT NOT NULL AUTO_INCREMENT,
                     user_id INT NOT NULL,
                     image VARCHAR(100) NOT NULL,
+                    health INT NOT NULL,
                     remarks VARCHAR(25) NOT NULL,
                     sample VARCHAR(10) NOT NULL,
                     FOREIGN KEY(user_id) REFERENCES users(id),
@@ -49,7 +52,24 @@ def create_tables(cursor):
 def read_report_count():
     cursor = connection_pool.cursor()
     create_tables(cursor)
-    cursor.execute('SELECT COUNT(*) AS count FROM reports;')
+    cursor.execute('SELECT MAX(id) AS count FROM reports;')
     count, = cursor.fetchone()
     cursor.close()
     return count or 0
+
+
+def read_reports(user_id):
+    cursor = connection_pool.cursor()
+    create_tables(cursor)
+    cursor.execute('SELECT * FROM reports WHERE user_id=%s;', (user_id,))
+    result = cursor.fetchall()
+    reports = [{
+        'id': id,
+        'user_id': user_id,
+        'image_url': image_url,
+        'health': health,
+        'remarks': remarks,
+        'sample': sample,
+    } for id, user_id, image_url, health, remarks, sample in result]
+    cursor.close()
+    return reports

@@ -49,4 +49,13 @@ def create_report(sample):
 
 @reports.route('/reports/', methods=['GET'])
 def get_reports():
-    pass
+    user_id = request.args.get('user_id', None)
+    if user_id:
+        result = report.read_reports(user_id)
+
+        return {
+            'base_image_url': request.root_url,
+            'reports': result
+        }
+
+    return {'message': 'Something went wrong!'}, 400
