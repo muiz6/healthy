@@ -20,3 +20,9 @@ getUser() async {
   }
   return null;
 }
+
+clearUser() async {
+  final sharedPref = await SharedPreferences.getInstance();
+  await sharedPref.remove(keyEmail);
+  await sharedPref.remove(keyName);
+}

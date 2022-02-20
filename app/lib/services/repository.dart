@@ -14,3 +14,7 @@ signUp(name, email, password) async {
   await shared_pref.saveUser(user);
   return user;
 }
+
+signOut() async {
+  await shared_pref.clearUser();
+}
