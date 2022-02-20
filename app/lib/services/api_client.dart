@@ -30,3 +30,13 @@ signIn(email, password) async {
   );
   return result.data;
 }
+
+getReports(userId) async {
+  final result = await _dio.get(
+    'reports/',
+    queryParameters: {
+      'user_id': userId,
+    },
+  );
+  return result.data;
+}

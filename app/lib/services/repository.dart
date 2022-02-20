@@ -18,3 +18,8 @@ signUp(name, email, password) async {
 signOut() async {
   await shared_pref.clearUser();
 }
+
+getReports() async {
+  final user = await getUser();
+  return api_client.getReports(user['id']);
+}
