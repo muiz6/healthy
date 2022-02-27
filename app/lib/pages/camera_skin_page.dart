@@ -4,7 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:healthy/dimens.dart' as dimens;
+import 'package:healthy/pages/result_hair_page.dart';
 import 'package:healthy/pages/result_skin_page.dart';
+import 'package:healthy/services/repository.dart' as repository;
 
 class CameraSkinPage extends StatefulWidget {
   @override
@@ -55,7 +57,7 @@ class _CameraSkinPageState extends State<CameraSkinPage> {
                         ),
                       ),
                     ),
-                    onTap: () => Get.to(ResultSkinPage()),
+                    onTap: () => _onCapture(),
                   ),
                   SizedBox(
                     height: 50,
@@ -84,5 +86,12 @@ class _CameraSkinPageState extends State<CameraSkinPage> {
         CameraController(availableCameraList[0], ResolutionPreset.max);
     await _cameraController?.initialize();
     return _cameraController;
+  }
+
+  _onCapture() async {
+    final file = await _cameraController?.takePicture();
+    final b = await file?.readAsBytes();
+    final report = await repository.postReportSkin(b?.toList(), file?.name);
+    Get.off(() => ResultSkinPage(report));
   }
 }

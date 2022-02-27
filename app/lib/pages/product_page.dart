@@ -20,7 +20,7 @@ class ProductPage extends StatelessWidget {
         itemBuilder: (_, index) => Padding(
           padding: const EdgeInsets.all(dimens.insetM),
           child: MyListTile(
-            imageAssetName: 'assets/img/product.jpg',
+            imageUrl: products[index]['image_url'],
             title: products[index]['name'],
           ),
         ),

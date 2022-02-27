@@ -58,3 +58,17 @@ postReportHair(userId, imageBytes, fileName) async {
   );
   return result.data;
 }
+
+postReportSkin(userId, imageBytes, fileName) async {
+  final result = await _dio.post(
+    'reports/skin/',
+    data: FormData.fromMap({
+      'user_id': userId,
+      'picture': MultipartFile.fromBytes(
+        imageBytes,
+        filename: fileName,
+      ),
+    }),
+  );
+  return result.data;
+}

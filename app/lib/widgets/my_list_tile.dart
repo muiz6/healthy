@@ -4,10 +4,10 @@ import 'package:healthy/dimens.dart' as dimens;
 
 class MyListTile extends StatelessWidget {
   String title;
-  String imageAssetName;
+  String imageUrl;
 
   MyListTile({
-    required this.imageAssetName,
+    required this.imageUrl,
     required this.title,
   });
 
@@ -23,7 +23,8 @@ class MyListTile extends StatelessWidget {
               width: 70,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(imageAssetName),
+                  image: NetworkImage(imageUrl),
+                  fit: BoxFit.cover,
                 ),
                 shape: BoxShape.circle,
               ),

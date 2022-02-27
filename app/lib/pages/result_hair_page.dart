@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:healthy/dimens.dart' as dimens;
 import 'package:healthy/pages/product_page.dart';
 import 'package:healthy/pages/remedy_page.dart';
+import 'package:healthy/pages/view_report_page.dart';
 import 'package:healthy/strings.dart' as strings;
 import 'package:healthy/widgets/view_more_tile.dart';
 
@@ -75,7 +76,7 @@ class ResultHairPage extends StatelessWidget {
                 height: dimens.insetL,
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () => Get.to(ViewReportPage()),
                 child: Text('View Reports'),
               ),
             ],

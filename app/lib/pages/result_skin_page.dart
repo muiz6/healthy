@@ -4,10 +4,15 @@ import 'package:get/get.dart';
 import 'package:healthy/dimens.dart' as dimens;
 import 'package:healthy/pages/product_page.dart';
 import 'package:healthy/pages/remedy_page.dart';
+import 'package:healthy/pages/view_report_page.dart';
 import 'package:healthy/strings.dart' as strings;
 import 'package:healthy/widgets/view_more_tile.dart';
 
 class ResultSkinPage extends StatelessWidget {
+  final report;
+
+  ResultSkinPage(this.report);
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -25,7 +30,7 @@ class ResultSkinPage extends StatelessWidget {
                 style: textTheme.headline4,
               ),
               Text(
-                '70.0',
+                '${report['health']}',
                 style: TextStyle(
                   fontSize: 100,
                   fontWeight: FontWeight.w300,
@@ -36,7 +41,7 @@ class ResultSkinPage extends StatelessWidget {
                 style: textTheme.headline4,
               ),
               Text(
-                'GOOD',
+                report['remarks'],
                 style: textTheme.headline3?.copyWith(
                   color: Colors.green,
                 ),
@@ -48,7 +53,7 @@ class ResultSkinPage extends StatelessWidget {
                 imageAssetName: 'assets/img/product.jpg',
                 title: 'Products',
                 subtitle: 'Natural products for better health',
-                onClick: () => Get.to(ProductPage([])),
+                onClick: () => Get.to(ProductPage(report['products'])),
               ),
               SizedBox(
                 height: dimens.insetM,
@@ -57,7 +62,7 @@ class ResultSkinPage extends StatelessWidget {
                 imageAssetName: 'assets/img/plant.jpg',
                 title: 'Home Remedies',
                 subtitle: 'For the DIY enthusiasts',
-                onClick: () => Get.to(RemedyPage([])),
+                onClick: () => Get.to(RemedyPage(report['home_remedies'])),
               ),
               SizedBox(
                 height: dimens.insetM,
@@ -71,7 +76,7 @@ class ResultSkinPage extends StatelessWidget {
                 height: dimens.insetL,
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () => Get.to(ViewReportPage()),
                 child: Text('View Reports'),
               ),
             ],
