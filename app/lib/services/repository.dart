@@ -23,3 +23,8 @@ getReports() async {
   final user = await getUser();
   return api_client.getReports(user['id']);
 }
+
+postReportHair(imageBytes, fileName) async {
+  final user = await getUser();
+  return api_client.postReportHair(user['id'], imageBytes, fileName);
+}

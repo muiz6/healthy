@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import 'package:healthy/dimens.dart' as dimens;
 import 'package:healthy/pages/result_hair_page.dart';
+import 'package:healthy/services/repository.dart' as repository;
 
 class CameraHairPage extends StatefulWidget {
   @override
@@ -55,7 +56,7 @@ class _CameraHairPageState extends State<CameraHairPage> {
                         ),
                       ),
                     ),
-                    onTap: () => Get.to(ResultHairPage()),
+                    onTap: _onCapture,
                   ),
                   SizedBox(
                     height: 50,
@@ -84,5 +85,12 @@ class _CameraHairPageState extends State<CameraHairPage> {
         CameraController(availableCameraList[0], ResolutionPreset.max);
     await _cameraController?.initialize();
     return _cameraController;
+  }
+
+  _onCapture() async {
+    final file = await _cameraController?.takePicture();
+    final b = await file?.readAsBytes();
+    await repository.postReportHair(b?.toList(), file?.name);
+    Get.to(() => ResultHairPage());
   }
 }

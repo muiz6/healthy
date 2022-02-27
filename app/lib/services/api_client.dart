@@ -44,3 +44,17 @@ getReports(userId) async {
       report['image_url'] = '${_apiUrl}images/${report["image_url"]}');
   return result.data;
 }
+
+postReportHair(userId, imageBytes, fileName) async {
+  final result = await _dio.post(
+    'reports/hair/',
+    data: FormData.fromMap({
+      'user_id': userId,
+      'picture': MultipartFile.fromBytes(
+        imageBytes,
+        filename: fileName,
+      ),
+    }),
+  );
+  return result.data;
+}
