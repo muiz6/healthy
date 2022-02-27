@@ -39,7 +39,7 @@ def create_report(sample):
         response['sample'] = sample
 
         report.create_report(response)
-        response['image_url'] = f'{request.root_url}images/{response.pop("image", "#")}'
+        response['image_url'] = f'/images/{response.pop("image", "#")}'
 
         return response
 
@@ -53,7 +53,7 @@ def get_reports():
         result = report.read_reports(user_id)
 
         return {
-            'base_image_url': f'{request.root_url}images/',
+            'base_image_url': f'/images/',
             'reports': result
         }
 
