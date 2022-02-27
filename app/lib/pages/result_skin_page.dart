@@ -48,7 +48,7 @@ class ResultSkinPage extends StatelessWidget {
                 imageAssetName: 'assets/img/product.jpg',
                 title: 'Products',
                 subtitle: 'Natural products for better health',
-                onClick: () => Get.to(ProductPage()),
+                onClick: () => Get.to(ProductPage([])),
               ),
               SizedBox(
                 height: dimens.insetM,
@@ -57,7 +57,7 @@ class ResultSkinPage extends StatelessWidget {
                 imageAssetName: 'assets/img/plant.jpg',
                 title: 'Home Remedies',
                 subtitle: 'For the DIY enthusiasts',
-                onClick: () => Get.to(RemedyPage()),
+                onClick: () => Get.to(RemedyPage([])),
               ),
               SizedBox(
                 height: dimens.insetM,

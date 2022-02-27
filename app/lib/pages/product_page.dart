@@ -5,6 +5,10 @@ import 'package:healthy/widgets/my_list_tile.dart';
 import 'package:healthy/strings.dart' as strings;
 
 class ProductPage extends StatelessWidget {
+  final products;
+
+  ProductPage(this.products);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,12 +16,12 @@ class ProductPage extends StatelessWidget {
         title: Text(strings.products),
       ),
       body: ListView.builder(
-        itemCount: 20,
+        itemCount: products.length,
         itemBuilder: (_, index) => Padding(
           padding: const EdgeInsets.all(dimens.insetM),
           child: MyListTile(
             imageAssetName: 'assets/img/product.jpg',
-            title: 'Product ${index + 1}',
+            title: products[index]['name'],
           ),
         ),
         padding: EdgeInsets.all(dimens.insetM),

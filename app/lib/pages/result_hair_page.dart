@@ -8,6 +8,10 @@ import 'package:healthy/strings.dart' as strings;
 import 'package:healthy/widgets/view_more_tile.dart';
 
 class ResultHairPage extends StatelessWidget {
+  final report;
+
+  ResultHairPage(this.report);
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -25,7 +29,7 @@ class ResultHairPage extends StatelessWidget {
                 style: textTheme.headline4,
               ),
               Text(
-                '37.0',
+                '${report['health']}',
                 style: TextStyle(
                   fontSize: 100,
                   fontWeight: FontWeight.w300,
@@ -36,7 +40,7 @@ class ResultHairPage extends StatelessWidget {
                 style: textTheme.headline4,
               ),
               Text(
-                'BAD',
+                report['remarks'],
                 style: textTheme.headline3?.copyWith(
                   color: Colors.red,
                 ),
@@ -48,7 +52,7 @@ class ResultHairPage extends StatelessWidget {
                 imageAssetName: 'assets/img/product.jpg',
                 title: 'Products',
                 subtitle: 'Natural products for better health',
-                onClick: () => Get.to(ProductPage()),
+                onClick: () => Get.to(ProductPage(report['products'])),
               ),
               SizedBox(
                 height: dimens.insetM,
@@ -57,7 +61,7 @@ class ResultHairPage extends StatelessWidget {
                 imageAssetName: 'assets/img/plant.jpg',
                 title: 'Home Remedies',
                 subtitle: 'For the DIY enthusiasts',
-                onClick: () => Get.to(RemedyPage()),
+                onClick: () => Get.to(RemedyPage(report['home_remedies'])),
               ),
               SizedBox(
                 height: dimens.insetM,

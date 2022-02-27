@@ -90,7 +90,7 @@ class _CameraHairPageState extends State<CameraHairPage> {
   _onCapture() async {
     final file = await _cameraController?.takePicture();
     final b = await file?.readAsBytes();
-    await repository.postReportHair(b?.toList(), file?.name);
-    Get.to(() => ResultHairPage());
+    final report = await repository.postReportHair(b?.toList(), file?.name);
+    Get.to(() => ResultHairPage(report));
   }
 }
