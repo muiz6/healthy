@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 
+const _apiUrl = 'http://192.168.18.8/';
+
 final _dio = Dio(BaseOptions(
-  baseUrl: 'http://192.168.18.8/',
+  baseUrl: _apiUrl,
   connectTimeout: 5000,
   receiveTimeout: 5000,
 ));
@@ -38,5 +40,7 @@ getReports(userId) async {
       'user_id': userId,
     },
   );
+  result.data['reports'].forEach((report) =>
+      report['image_url'] = '${_apiUrl}images/${report["image_url"]}');
   return result.data;
 }

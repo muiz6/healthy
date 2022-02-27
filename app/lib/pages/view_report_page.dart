@@ -16,14 +16,17 @@ ViewReportPage() {
           if (snapshot.hasData) {
             final data = snapshot.data;
             return ListView.builder(
+              padding: EdgeInsets.all(8),
               itemBuilder: (_, index) {
                 final report = data['reports'][index];
-                return ReportTile(
-                  // imageUrl: '${data['base_image_url']}${report['image_url']}',
-                  imageUrl: 'http://192.168.18.8/images/${report['image_url']}',
-                  health: report['health'],
-                  remarks: report['remarks'],
-                  sample: report['sample'],
+                return Padding(
+                  child: ReportTile(
+                    imageUrl: report['image_url'],
+                    health: report['health'],
+                    remarks: report['remarks'],
+                    sample: report['sample'],
+                  ),
+                  padding: EdgeInsets.all(8),
                 );
               },
               itemCount: data['reports'].length,
