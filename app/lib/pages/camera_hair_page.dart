@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:dotted_border/dotted_border.dart';
 
 import 'package:healthy/dimens.dart' as dimens;
 import 'package:healthy/pages/result_hair_page.dart';
@@ -13,7 +14,15 @@ class CameraHairPage extends StatefulWidget {
 }
 
 class _CameraHairPageState extends State<CameraHairPage> {
+  int _selectedCamera = 0;
   CameraController? _cameraController;
+  double _cameraAspectRatio = 1;
+
+  @override
+  void initState() {
+    _onFlipCamera();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,52 +31,71 @@ class _CameraHairPageState extends State<CameraHairPage> {
         foregroundColor: Colors.white,
       ),
       body: Stack(
-        fit: StackFit.expand,
         children: [
-          FutureBuilder<CameraController?>(
-            future: _initializeCamera(),
-            builder: (_, snapshot) {
-              if (snapshot.hasData) {
-                return CameraPreview(snapshot.data!);
-              }
-              return Container(
-                color: Colors.black,
-              );
-            },
-          ),
+          _cameraController != null
+              ? Container(
+                  child: AspectRatio(
+                    child: CameraPreview(_cameraController!),
+                    aspectRatio: _cameraAspectRatio,
+                  ),
+                  color: Colors.black,
+                  alignment: Alignment.center)
+              : Container(color: Colors.black),
           Column(
             children: [
-              Container(),
-              SvgPicture.asset(
-                'assets/svg/hair_guide.svg',
-                color: Colors.white,
+              SizedBox(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: DottedBorder(
+                  child: Container(
+                    height: 350,
+                  ),
+                  borderType: BorderType.RRect,
+                  dashPattern: [15, 5],
+                  radius: Radius.circular(30),
+                  color: Colors.white,
+                  strokeWidth: 5,
+                ),
               ),
-              Column(
-                children: [
-                  GestureDetector(
-                    child: Container(
-                      height: 70,
-                      width: 70,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.white,
-                          width: 5,
+              Padding(
+                child: Stack(
+                  children: [
+                    Center(
+                      child: GestureDetector(
+                        child: Container(
+                          height: 70,
+                          width: 70,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.white,
+                              width: 5,
+                            ),
+                          ),
                         ),
+                        onTap: _onCapture,
                       ),
                     ),
-                    onTap: _onCapture,
-                  ),
-                  SizedBox(
-                    height: 50,
-                  ),
-                ],
-                mainAxisAlignment: MainAxisAlignment.center,
+                    Align(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: IconButton(
+                          color: Colors.white,
+                          icon: Icon(Icons.flip_camera_android_outlined),
+                          onPressed: _onFlipCamera,
+                        ),
+                      ),
+                      alignment: Alignment.centerRight,
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.only(bottom: 50),
               ),
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
           ),
         ],
+        fit: StackFit.expand,
       ),
       extendBodyBehindAppBar: true,
     );
@@ -79,18 +107,23 @@ class _CameraHairPageState extends State<CameraHairPage> {
     super.dispose();
   }
 
-  Future<CameraController?> _initializeCamera() async {
-    final availableCameraList = await availableCameras();
-    _cameraController =
-        CameraController(availableCameraList[0], ResolutionPreset.max);
-    await _cameraController?.initialize();
-    return _cameraController;
-  }
-
   _onCapture() async {
     final file = await _cameraController?.takePicture();
     final b = await file?.readAsBytes();
     final report = await repository.postReportHair(b?.toList(), file?.name);
     Get.off(() => ResultHairPage(report));
+  }
+
+  _onFlipCamera() async {
+    _cameraController?.dispose();
+    setState(() => _cameraController = null);
+    _selectedCamera = (_selectedCamera + 1) % 2;
+    final availableCameraList = await availableCameras();
+    _cameraController = CameraController(
+        availableCameraList[_selectedCamera], ResolutionPreset.max);
+    await _cameraController?.initialize();
+    _cameraAspectRatio = _cameraController?.value.aspectRatio ?? 1;
+    _cameraAspectRatio = 1 / _cameraAspectRatio;
+    setState(() {});
   }
 }
