@@ -72,14 +72,15 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  _onSignIn(context) async {
+  Future<void> _onSignIn(context) async {
     if (formKey.currentState?.validate() ?? false) {
-      var successful = false;
+      bool successful = false;
       try {
         final result = await repository.signIn(emailCtrl.text, pwdCtrl.text);
         if (result != null) {
           successful = true;
           Get.offAll(SelectionPage());
+          return;
         }
       } catch (e) {}
       if (!successful) {

@@ -82,9 +82,9 @@ class SignUpPage extends StatelessWidget {
     );
   }
 
-  _onSignUp(context) async {
+  Future<void> _onSignUp(context) async {
     if (formKey.currentState?.validate() ?? false) {
-      var successful = false;
+      bool successful = false;
       try {
         final result = await repository.signUp(
             nameCtrl.text, emailCtrl.text, pwdCtrl.text);

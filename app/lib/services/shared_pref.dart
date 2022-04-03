@@ -4,14 +4,13 @@ const keyUserId = 'userId';
 const keyName = 'name';
 const keyEmail = 'email';
 
-saveUser(user) async {
+Future<void> saveUser(Map<String, dynamic> user) async {
   final sharedPref = await SharedPreferences.getInstance();
-  sharedPref.setInt(keyUserId, user['id']);
   sharedPref.setString(keyName, user['name']!);
   sharedPref.setString(keyEmail, user['email']!);
 }
 
-getUser() async {
+Future<Map<String, dynamic>?> getUser() async {
   final sharedPref = await SharedPreferences.getInstance();
   final email = sharedPref.getString(keyEmail);
   if (email != null) {
@@ -24,7 +23,7 @@ getUser() async {
   return null;
 }
 
-clearUser() async {
+Future<void> clearUser() async {
   final sharedPref = await SharedPreferences.getInstance();
   await sharedPref.remove(keyEmail);
   await sharedPref.remove(keyName);
