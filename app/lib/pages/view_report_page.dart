@@ -6,11 +6,11 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:healthy/services/repository.dart' as repository;
 import 'package:healthy/widgets/report_tile.dart';
 
-ViewReportPage() {
+Widget ViewReportPage() {
   return Scaffold(
     appBar: AppBar(title: Text('Your Reports')),
     body: SafeArea(
-      child: FutureBuilder<dynamic>(
+      child: FutureBuilder<List<Map<String, dynamic>>>(
         future: repository.getReports(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -28,7 +28,7 @@ ViewReportPage() {
                     ),
                   ],
                 ),
-                _buildChart(context, data['reports']),
+                _buildChart(context, data!),
                 Row(
                   children: [
                     Padding(
@@ -44,18 +44,18 @@ ViewReportPage() {
                   child: ListView.builder(
                     padding: EdgeInsets.all(8),
                     itemBuilder: (_, index) {
-                      final report = data['reports'][index];
+                      final report = data[index];
                       return Padding(
                         child: ReportTile(
-                          imageUrl: report['image_url'],
+                          imageUrl: report['imageUrl'],
                           health: report['health'],
-                          remarks: report['remarks'],
-                          sample: report['sample'],
+                          remarks: report['remarks'] ?? 'n/a',
+                          sample: report['type'],
                         ),
                         padding: EdgeInsets.all(8),
                       );
                     },
-                    itemCount: data['reports'].length,
+                    itemCount: data.length,
                   ),
                 ),
               ],
@@ -68,7 +68,7 @@ ViewReportPage() {
   );
 }
 
-_buildChart(BuildContext context, List<dynamic> reports) {
+Widget _buildChart(BuildContext context, List<Map<String, dynamic>> reports) {
   final colorScheme = Theme.of(context).colorScheme;
   List<Color> gradientColors = [
     colorScheme.primaryVariant,
@@ -92,11 +92,12 @@ _buildChart(BuildContext context, List<dynamic> reports) {
       lineBarsData: [
         LineChartBarData(
           spots: reports
+              .sublist(max(reports.length - 11, 0))
               .asMap()
               .entries
               .map((entry) => FlSpot(
                     entry.key.toDouble(),
-                    entry.value['health'].toDouble(),
+                    entry.value['health'],
                   ))
               .toList(),
           isCurved: true,

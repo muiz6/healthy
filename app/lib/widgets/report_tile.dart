@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 ReportTile({
   required String imageUrl,
-  required int health,
+  required double health,
   required String remarks,
   required String sample,
 }) {
@@ -37,7 +37,7 @@ ReportTile({
             child: Column(
               children: [
                 Text(sample),
-                Text('$health%'),
+                Text(health.toStringAsFixed(2)),
                 Text(remarks),
               ],
               crossAxisAlignment: CrossAxisAlignment.start,

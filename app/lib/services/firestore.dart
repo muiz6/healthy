@@ -36,3 +36,8 @@ Future<Map<String, dynamic>> createReport(Map<String, dynamic> report) async {
   await reports.add(report);
   return report;
 }
+
+Future<List<Map<String, dynamic>>> readReports(String userEmail) async {
+  final snapshot = await reports.where('userEmail', isEqualTo: userEmail).get();
+  return snapshot.docs.map((document) => document.data()).toList();
+}
