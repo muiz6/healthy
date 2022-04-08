@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:healthy/services/api_client.dart' as api_client;
 import 'package:healthy/services/shared_pref.dart' as shared_pref;
 import 'package:healthy/services/firestore.dart' as firestore;
+import 'package:healthy/services/firebase_storage.dart' as fb_storage;
 
 const getUser = shared_pref.getUser;
 
@@ -28,9 +31,14 @@ getReports() async {
   return api_client.getReports(user?['id']);
 }
 
-postReportHair(imageBytes, fileName) async {
+Future<Map<String, dynamic>> postReportHair(File file) async {
   final user = await getUser();
-  return api_client.postReportHair(user?['id'], imageBytes, fileName);
+  final downloadUrl = await fb_storage.uploadImage(file);
+  return firestore.createReport({
+    'userEmail': user?['email'],
+    'imageUrl': downloadUrl,
+    'type': 'hair',
+  });
 }
 
 postReportSkin(imageBytes, fileName) async {
