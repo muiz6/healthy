@@ -44,19 +44,11 @@ Future<Map<String, dynamic>> postReportSkin(File imageFile) {
 Future<Map<String, dynamic>> postReport(File imageFile, String type) async {
   final user = await getUser();
   final downloadUrl = await fb_storage.uploadImage(imageFile);
-
-  final response = await img_processing.postFace(imageFile);
-  final face = response['faces'][0];
-
-  if (face != null) {
-    final health = 1 / max<double>(face['age'] - 12, 1);
-
-    return firestore.createReport({
-      'userEmail': user?['email'],
-      'imageUrl': downloadUrl,
-      'type': type,
-      'health': health,
-    });
-  }
-  throw (Exception('No face detected!'));
+  final health = await img_processing.postFace(imageFile);
+  return firestore.createReport({
+    'userEmail': user?['email'],
+    'imageUrl': downloadUrl,
+    'type': type,
+    'health': health,
+  });
 }
