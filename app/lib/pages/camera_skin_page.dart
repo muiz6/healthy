@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -107,14 +109,15 @@ class _CameraSkinPageState extends State<CameraSkinPage> {
     super.dispose();
   }
 
-  _onCapture() async {
-    final file = await _cameraController?.takePicture();
-    final b = await file?.readAsBytes();
-    final report = await repository.postReportSkin(b?.toList(), file?.name);
-    Get.off(() => ResultSkinPage(report));
+  Future<void> _onCapture() async {
+    if (_cameraController != null) {
+      final file = await _cameraController!.takePicture();
+      final report = await repository.postReportSkin(File(file.name));
+      Get.off(() => ResultSkinPage(report));
+    }
   }
 
-  _onFlipCamera() async {
+  Future<void> _onFlipCamera() async {
     _cameraController?.dispose();
     setState(() => _cameraController = null);
     _selectedCamera = (_selectedCamera + 1) % 2;
