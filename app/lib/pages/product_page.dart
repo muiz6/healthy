@@ -5,7 +5,7 @@ import 'package:healthy/widgets/my_list_tile.dart';
 import 'package:healthy/strings.dart' as strings;
 
 class ProductPage extends StatelessWidget {
-  final products;
+  final List<Map<String, dynamic>> products;
 
   ProductPage(this.products);
 
@@ -20,7 +20,7 @@ class ProductPage extends StatelessWidget {
         itemBuilder: (_, index) => Padding(
           padding: const EdgeInsets.all(dimens.insetM),
           child: MyListTile(
-            imageUrl: products[index]['image_url'],
+            imageUrl: products[index]['imageUrl'],
             title: products[index]['name'],
           ),
         ),

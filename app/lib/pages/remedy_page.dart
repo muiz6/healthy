@@ -20,7 +20,7 @@ class RemedyPage extends StatelessWidget {
         itemBuilder: (_, index) => Padding(
           padding: const EdgeInsets.all(dimens.insetM),
           child: MyListTile(
-            imageUrl: homeRemedies[index]['image_url'],
+            imageUrl: homeRemedies[index]['imageUrl'],
             title: homeRemedies[index]['name'],
           ),
         ),

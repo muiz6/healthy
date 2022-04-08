@@ -5,6 +5,8 @@ const uuid = Uuid();
 final firestore = FirebaseFirestore.instance;
 final users = firestore.collection('users');
 final reports = firestore.collection('reports');
+final _products = firestore.collection('products');
+final _homeRemedies = firestore.collection('homeRemedies');
 
 Future<Map<String, dynamic>> createUser(name, email, password) async {
   final snapshot = await users.where('email', isEqualTo: email).get();
@@ -42,5 +44,15 @@ Future<List<Map<String, dynamic>>> readReports(String userEmail) async {
       .where('userEmail', isEqualTo: userEmail)
       .orderBy('createdAt')
       .get();
+  return snapshot.docs.map((document) => document.data()).toList();
+}
+
+Future<List<Map<String, dynamic>>> readProducts() async {
+  final snapshot = await _products.get();
+  return snapshot.docs.map((document) => document.data()).toList();
+}
+
+Future<List<Map<String, dynamic>>> readHomeRemedies() async {
+  final snapshot = await _homeRemedies.get();
   return snapshot.docs.map((document) => document.data()).toList();
 }
