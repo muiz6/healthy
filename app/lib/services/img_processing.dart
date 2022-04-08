@@ -27,7 +27,7 @@ Future<double> postFace(File imageFile) async {
     }),
   );
   final face = response.data['faces'][0];
-  if (face) {
+  if (face != null) {
     return 1 / max<double>(face['age'] - 12, 1);
   }
   throw (Exception('No face detected!'));

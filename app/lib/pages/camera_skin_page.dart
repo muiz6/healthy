@@ -112,7 +112,7 @@ class _CameraSkinPageState extends State<CameraSkinPage> {
   Future<void> _onCapture() async {
     if (_cameraController != null) {
       final file = await _cameraController!.takePicture();
-      final report = await repository.postReportSkin(File(file.name));
+      final report = await repository.postReportSkin(File(file.path));
       Get.off(() => ResultSkinPage(report));
     }
   }

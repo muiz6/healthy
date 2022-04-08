@@ -30,7 +30,7 @@ class ResultSkinPage extends StatelessWidget {
                 style: textTheme.headline4,
               ),
               Text(
-                '${report['health']}',
+                report['health'].toStringAsFixed(2),
                 style: TextStyle(
                   fontSize: 100,
                   fontWeight: FontWeight.w300,
@@ -41,7 +41,7 @@ class ResultSkinPage extends StatelessWidget {
                 style: textTheme.headline4,
               ),
               Text(
-                report['remarks'],
+                report['remarks'] ?? 'n/a',
                 style: textTheme.headline3?.copyWith(
                   color: Colors.green,
                 ),
