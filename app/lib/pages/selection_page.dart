@@ -21,12 +21,15 @@ class SelectionPage extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.logout,
-                      color: Colors.red,
+                  ElevatedButton(
+                    child: Text('Sign Out'),
+                    onPressed: () => _onSignOut(context),
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all(EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 4,
+                      )),
                     ),
-                    onPressed: _onSignOut,
                   ),
                 ],
               ),
@@ -98,8 +101,31 @@ class SelectionPage extends StatelessWidget {
     );
   }
 
-  Future<void> _onSignOut() async {
-    await repository.signOut();
-    Get.offAll(() => SplashPage());
+  Future<void> _onSignOut(BuildContext context) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (builderContext) {
+        return AlertDialog(
+          content: Text('Are you sure you want to sign out?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(builderContext).pop(false),
+              child: Text(
+                'No',
+                style: TextStyle(color: Colors.grey[500]),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(builderContext).pop(true),
+              child: Text('Yes'),
+            ),
+          ],
+        );
+      },
+    );
+    if (confirmed ?? false) {
+      await repository.signOut();
+      Get.offAll(() => SplashPage());
+    }
   }
 }

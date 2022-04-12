@@ -9,23 +9,31 @@ import 'package:healthy/strings.dart' as strings;
 import 'package:healthy/util/validators.dart' as validators;
 import 'package:healthy/widgets/scrollable_body.dart';
 
-class SignInPage extends StatelessWidget {
+class SignInPage extends StatefulWidget {
+  @override
+  State<SignInPage> createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
   final emailCtrl = TextEditingController();
   final formKey = GlobalKey<FormState>();
   final pwdCtrl = TextEditingController();
+  bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ScrollableBody(
-        child: Form(
-          child: Column(
-            children: _buildColumnItems(context),
-            mainAxisAlignment: MainAxisAlignment.center,
-          ),
-          key: formKey,
-        ),
-      ),
+      body: _loading
+          ? Center(child: CircularProgressIndicator())
+          : ScrollableBody(
+              child: Form(
+                child: Column(
+                  children: _buildColumnItems(context),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                ),
+                key: formKey,
+              ),
+            ),
     );
   }
 
@@ -75,6 +83,7 @@ class SignInPage extends StatelessWidget {
   Future<void> _onSignIn(context) async {
     if (formKey.currentState?.validate() ?? false) {
       bool successful = false;
+      setState(() => _loading = true);
       try {
         final result = await repository.signIn(emailCtrl.text, pwdCtrl.text);
         if (result != null) {
@@ -84,6 +93,8 @@ class SignInPage extends StatelessWidget {
         }
       } catch (e) {}
       if (!successful) {
+        await Future.delayed(Duration(seconds: 1));
+        setState(() => _loading = false);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Something went wrong'),
         ));
