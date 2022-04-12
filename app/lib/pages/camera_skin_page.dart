@@ -56,7 +56,7 @@ class _CameraSkinPageState extends State<CameraSkinPage> {
                   borderType: BorderType.Oval,
                   dashPattern: [15, 5],
                   color: Colors.white,
-                  strokeWidth: 5,
+                  strokeWidth: 3,
                 ),
               ),
               Padding(

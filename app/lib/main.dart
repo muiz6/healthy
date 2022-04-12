@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
       title: strings.appName,
       theme: theme.appTheme,
       home: SplashPage(),
+      defaultTransition: Transition.leftToRight,
     );
   }
 }

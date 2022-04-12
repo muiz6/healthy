@@ -56,7 +56,7 @@ class _CameraHairPageState extends State<CameraHairPage> {
                   dashPattern: [15, 5],
                   radius: Radius.circular(30),
                   color: Colors.white,
-                  strokeWidth: 5,
+                  strokeWidth: 3,
                 ),
               ),
               Padding(

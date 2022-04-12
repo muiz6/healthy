@@ -32,3 +32,17 @@ Future<double> postFace(File imageFile) async {
   }
   throw (Exception('No face detected!'));
 }
+
+Future<Map<String, dynamic>> postFace2(File imageFile) async {
+  final response = await _dio.post(
+    'https://www.betafaceapi.com/api/v2/media/file',
+    data: FormData.fromMap({
+      'api_key': secrets.betafaceApiKey,
+      'file': MultipartFile.fromBytes(
+        await imageFile.readAsBytes(),
+        filename: imageFile.uri.pathSegments.last,
+      ),
+    }),
+  );
+  return response.data;
+}
