@@ -9,24 +9,42 @@ import 'package:healthy/strings.dart' as strings;
 import 'package:healthy/util/validators.dart' as validators;
 import 'package:healthy/widgets/scrollable_body.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
   final emailCtrl = TextEditingController();
   final formKey = GlobalKey<FormState>();
   final nameCtrl = TextEditingController();
   final pwdCtrl = TextEditingController();
+  final _confirmPwdCtrl = TextEditingController();
+  final _dobController = TextEditingController();
+  String _gender = 'male';
+  DateTime _dob = DateTime.now();
+  bool _loading = false;
+
+  @override
+  void initState() {
+    _dobController.value = TextEditingValue(text: _format(_dob));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ScrollableBody(
-        child: Form(
-          child: Column(
-            children: _buildColumnItems(context),
-            mainAxisAlignment: MainAxisAlignment.center,
-          ),
-          key: formKey,
-        ),
-      ),
+      body: _loading
+          ? Center(child: CircularProgressIndicator())
+          : ScrollableBody(
+              child: Form(
+                child: Column(
+                  children: _buildColumnItems(context),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                ),
+                key: formKey,
+              ),
+            ),
     );
   }
 
@@ -53,7 +71,45 @@ class SignUpPage extends StatelessWidget {
       TextFormField(
         controller: pwdCtrl,
         obscureText: true,
-        validator: validators.validatePassword,
+        validator: (value) => validators.validateConfirmPassword(
+          value,
+          _confirmPwdCtrl,
+        ),
+      ),
+      SizedBox(height: dimens.insetL),
+      Row(children: [Text('Confirm Password')]),
+      TextFormField(
+        controller: _confirmPwdCtrl,
+        obscureText: true,
+        validator: (value) => validators.validateConfirmPassword(
+          value,
+          pwdCtrl,
+        ),
+      ),
+      SizedBox(height: dimens.insetL),
+      Row(children: [Text('Date Of Birth')]),
+      TextFormField(
+        controller: _dobController,
+        readOnly: true,
+        onTap: () => _onPickDate(context),
+      ),
+      SizedBox(height: dimens.insetL),
+      Row(children: [Text('Gender')]),
+      Row(
+        children: [
+          Radio(
+            value: 'male',
+            groupValue: _gender,
+            onChanged: (String? value) => setState(() => _gender = value!),
+          ),
+          Expanded(child: Text('Male')),
+          Radio(
+            value: 'female',
+            groupValue: _gender,
+            onChanged: (String? value) => setState(() => _gender = value!),
+          ),
+          Expanded(child: Text('Female')),
+        ],
       ),
       SizedBox(height: 40),
       _signInMsg(),
@@ -86,18 +142,43 @@ class SignUpPage extends StatelessWidget {
     if (formKey.currentState?.validate() ?? false) {
       bool successful = false;
       try {
-        final result = await repository.signUp(
-            nameCtrl.text, emailCtrl.text, pwdCtrl.text);
+        setState(() => _loading = true);
+        final result = await repository.signUp({
+          'name': nameCtrl.text,
+          'email': emailCtrl.text,
+          'password': pwdCtrl.text,
+          'gender': _gender,
+          'dob': _dob,
+        });
         if (result != null) {
           successful = true;
           Get.offAll(SelectionPage());
         }
       } catch (e) {}
       if (!successful) {
+        await Future.delayed(Duration(seconds: 1));
+        setState(() => _loading = false);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Something went wrong'),
         ));
       }
     }
+  }
+
+  Future<void> _onPickDate(BuildContext context) async {
+    final date = await showDatePicker(
+      context: context,
+      initialDate: _dob,
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (date != null) {
+      _dob = date;
+      _dobController.value = TextEditingValue(text: _format(_dob));
+    }
+  }
+
+  String _format(DateTime date) {
+    return '${date.day}-${date.month}-${date.year}';
   }
 }

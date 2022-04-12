@@ -8,18 +8,13 @@ final reports = firestore.collection('reports');
 final _products = firestore.collection('products');
 final _homeRemedies = firestore.collection('homeRemedies');
 
-Future<Map<String, dynamic>> createUser(name, email, password) async {
-  final snapshot = await users.where('email', isEqualTo: email).get();
+Future<Map<String, dynamic>> createUser(Map<String, dynamic> user) async {
+  final snapshot = await users.where('email', isEqualTo: user['email']).get();
   if (snapshot.docs.isEmpty) {
-    final user = {
-      'email': email,
-      'name': name,
-      'password': password,
-    };
     await users.add(user);
     return user;
   }
-  throw (ArgumentError('User $email: already exists!'));
+  throw (ArgumentError('User ${user["email"]}: already exists!'));
 }
 
 Future<Map<String, dynamic>?> readUser(email) async {

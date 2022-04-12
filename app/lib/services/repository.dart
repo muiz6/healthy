@@ -15,10 +15,9 @@ Future<Map<String, dynamic>?> signIn(String email, String password) async {
   }
 }
 
-Future<Map<String, dynamic>?> signUp(
-    String name, String email, String password) async {
-  final user = await firestore.createUser(name, email, password);
-  await shared_pref.saveUser(user);
+Future<Map<String, dynamic>?> signUp(Map<String, dynamic> user) async {
+  final signedUser = await firestore.createUser(user);
+  await shared_pref.saveUser(signedUser);
   return user;
 }
 
