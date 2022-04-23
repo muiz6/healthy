@@ -34,12 +34,21 @@ Future<Map<String, dynamic>> createReport(Map<String, dynamic> report) async {
   return report;
 }
 
-Future<List<Map<String, dynamic>>> readReports(String userEmail) async {
-  final snapshot = await reports
-      .where('userEmail', isEqualTo: userEmail)
-      .orderBy('createdAt')
-      .get();
+Future<List<Map<String, dynamic>>> readReports(
+    String userEmail, String? type) async {
+  Query<Map<String, dynamic>> query =
+      reports.where('userEmail', isEqualTo: userEmail);
+  if (type != null && type.isNotEmpty) {
+    query = query.where('type', isEqualTo: type);
+  }
+  query = query.orderBy('createdAt', descending: true);
+  final snapshot = await query.get();
   return snapshot.docs.map((document) => document.data()).toList();
+}
+
+Future<void> deleteReport(String id) async {
+  final snapshot = await reports.where('id', isEqualTo: id).get();
+  await snapshot.docs.first.reference.delete();
 }
 
 Future<List<Map<String, dynamic>>> readProducts() async {

@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 
 import 'package:healthy/pages/camera_hair_page.dart';
 import 'package:healthy/pages/camera_skin_page.dart';
+import 'package:healthy/pages/select_report_page.dart';
 import 'package:healthy/pages/splash_page.dart';
-import 'package:healthy/pages/view_report_page.dart';
 import 'package:healthy/services/repository.dart' as repository;
 import 'package:healthy/strings.dart' as strings;
 import 'package:healthy/dimens.dart' as dimens;
@@ -86,7 +86,7 @@ class SelectionPage extends StatelessWidget {
                     ),
                     SizedBox(height: dimens.insetL),
                     ElevatedButton(
-                      onPressed: () => Get.to(ViewReportPage()),
+                      onPressed: () => Get.to(() => SelectReportPage()),
                       child: Text('View Reports'),
                     ),
                   ],

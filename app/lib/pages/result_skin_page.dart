@@ -76,7 +76,7 @@ class ResultSkinPage extends StatelessWidget {
                 height: dimens.insetL,
               ),
               ElevatedButton(
-                onPressed: () => Get.to(ViewReportPage()),
+                onPressed: () => Get.to(() => ViewReportPage(type: 'skin')),
                 child: Text('View Reports'),
               ),
             ],

@@ -6,6 +6,7 @@ import 'package:healthy/services/firebase_storage.dart' as fb_storage;
 import 'package:healthy/services/img_processing.dart' as img_processing;
 
 const getUser = shared_pref.getUser;
+const deleteReport = firestore.deleteReport;
 
 Future<Map<String, dynamic>?> signIn(String email, String password) async {
   final user = await firestore.readUser(email);
@@ -25,9 +26,9 @@ Future<void> signOut() async {
   await shared_pref.clearUser();
 }
 
-Future<List<Map<String, dynamic>>> getReports() async {
+Future<List<Map<String, dynamic>>> getReports(String? type) async {
   final user = await getUser();
-  return firestore.readReports(user!['email']);
+  return firestore.readReports(user!['email'], type);
 }
 
 Future<Map<String, dynamic>> postReportHair(File imageFile) {

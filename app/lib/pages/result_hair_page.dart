@@ -76,7 +76,7 @@ class ResultHairPage extends StatelessWidget {
                 height: dimens.insetL,
               ),
               ElevatedButton(
-                onPressed: () => Get.to(ViewReportPage()),
+                onPressed: () => Get.to(() => ViewReportPage(type: 'hair')),
                 child: Text('View Reports'),
               ),
             ],
