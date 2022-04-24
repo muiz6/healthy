@@ -49,9 +49,13 @@ class SelectionPage extends StatelessWidget {
                           padding: const EdgeInsets.all(dimens.insetL),
                           child: Column(
                             children: [
-                              Icon(
-                                Icons.face,
-                                size: 72,
+                              SizedBox(
+                                height: 85,
+                                width: 85,
+                                child: CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage('assets/img/hair.jpg'),
+                                ),
                               ),
                               SizedBox(
                                 height: dimens.insetM,
@@ -70,9 +74,13 @@ class SelectionPage extends StatelessWidget {
                           padding: const EdgeInsets.all(dimens.insetL),
                           child: Column(
                             children: [
-                              Icon(
-                                Icons.face_retouching_natural_sharp,
-                                size: 72,
+                              SizedBox(
+                                height: 85,
+                                width: 85,
+                                child: CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage('assets/img/skin.jpg'),
+                                ),
                               ),
                               SizedBox(
                                 height: dimens.insetM,
