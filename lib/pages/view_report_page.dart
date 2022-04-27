@@ -110,7 +110,10 @@ class _ViewReportPageState extends State<ViewReportPage> {
         lineBarsData: [
           LineChartBarData(
             spots: reports
-                .sublist(max(reports.length - 11, 0))
+                .take(10)
+                .toList()
+                .reversed
+                .toList()
                 .asMap()
                 .entries
                 .map((entry) => FlSpot(

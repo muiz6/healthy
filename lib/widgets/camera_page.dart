@@ -66,8 +66,9 @@ class _CameraHairPageState extends State<CameraPage> {
                   children: [
                     IconButton(
                       color: Colors.white,
+                      disabledColor: Colors.grey,
                       icon: Icon(Icons.image_outlined),
-                      onPressed: _onPickFile,
+                      onPressed: processing ? null : _onPickFile,
                     ),
                     processing
                         ? JumpingDots(
@@ -121,12 +122,7 @@ class _CameraHairPageState extends State<CameraPage> {
     if (_cameraController != null) {
       final file = await _cameraController!.takePicture();
       setState(() => processing = true);
-      Map<String, dynamic> result = {};
-      if (widget.type == 'hair') {
-        result = await repository.postReportHair(File(file.path));
-      } else if (widget.type == 'skin') {
-        result = await repository.postReportSkin(File(file.path));
-      }
+      final result = await _getResult(File(file.path));
       widget.onCapture?.call(result);
     }
   }
@@ -148,5 +144,21 @@ class _CameraHairPageState extends State<CameraPage> {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.image,
     );
+    final file = result?.files.first;
+    if (file != null) {
+      setState(() => processing = true);
+      final result = await _getResult(File(file.path!));
+      widget.onCapture?.call(result);
+    }
+  }
+
+  Future<Map<String, dynamic>> _getResult(File imageFile) {
+    if (widget.type == 'hair') {
+      return repository.postReportHair(imageFile);
+    }
+    if (widget.type == 'skin') {
+      return repository.postReportSkin(imageFile);
+    }
+    throw ArgumentError('Invalid Type');
   }
 }
