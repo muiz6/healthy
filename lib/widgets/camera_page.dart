@@ -2,11 +2,8 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:dotted_border/dotted_border.dart';
 
 import 'package:healthy/dimens.dart' as dimens;
-import 'package:healthy/pages/result_hair_page.dart';
 import 'package:healthy/services/repository.dart' as repository;
 
 class CameraPage extends StatefulWidget {

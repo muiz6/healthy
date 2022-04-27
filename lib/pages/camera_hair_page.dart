@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:dotted_border/dotted_border.dart';
 
 import 'package:healthy/pages/result_hair_page.dart';
-import 'package:healthy/services/repository.dart' as repository;
 import 'package:healthy/widgets/camera_page.dart';
 
 class CameraHairPage extends StatelessWidget {
@@ -18,10 +17,7 @@ class CameraHairPage extends StatelessWidget {
         color: Colors.white,
         strokeWidth: 3,
       ),
-      onCapture: (image) async {
-        final report = await repository.postReportHair(image);
-        Get.off(() => ResultHairPage(report));
-      },
+      onCapture: (image) => Get.off(() => ResultHairPage(image)),
     );
   }
 }
