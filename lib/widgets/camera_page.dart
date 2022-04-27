@@ -1,16 +1,19 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:jumping_dot/jumping_dot.dart';
 
-import 'package:healthy/dimens.dart' as dimens;
 import 'package:healthy/services/repository.dart' as repository;
+import 'package:healthy/widgets/flip_camera_button.dart';
 
 class CameraPage extends StatefulWidget {
   final Widget? foreground;
-  final void Function(File image)? onCapture;
+  final void Function(Map<String, dynamic> result)? onCapture;
+  final String type;
 
-  CameraPage({this.foreground, this.onCapture});
+  CameraPage({this.foreground, this.onCapture, required this.type});
 
   @override
   State<CameraPage> createState() => _CameraHairPageState();
@@ -20,6 +23,7 @@ class _CameraHairPageState extends State<CameraPage> {
   int _selectedCamera = 0;
   CameraController? _cameraController;
   double _cameraAspectRatio = 1;
+  bool processing = false;
 
   @override
   void initState() {
@@ -47,7 +51,7 @@ class _CameraHairPageState extends State<CameraPage> {
             children: [
               Container(
                 child: Text(
-                  'Message',
+                  processing ? 'Processing...' : 'Message',
                   style: TextStyle(color: Colors.white),
                 ),
                 color: Color(0x88000000),
@@ -58,38 +62,43 @@ class _CameraHairPageState extends State<CameraPage> {
                 child: widget.foreground,
               ),
               Padding(
-                child: Stack(
+                child: Row(
                   children: [
-                    Center(
-                      child: GestureDetector(
-                        child: Container(
-                          height: 70,
-                          width: 70,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 5,
+                    IconButton(
+                      color: Colors.white,
+                      icon: Icon(Icons.image_outlined),
+                      onPressed: _onPickFile,
+                    ),
+                    processing
+                        ? JumpingDots(
+                            color: Colors.white,
+                            radius: 10,
+                            numberOfDots: 3,
+                            animationDuration: Duration(milliseconds: 200),
+                          )
+                        : GestureDetector(
+                            child: Container(
+                              height: 70,
+                              width: 70,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 5,
+                                ),
+                              ),
                             ),
+                            onTap: _onCapture,
                           ),
-                        ),
-                        onTap: _onCapture,
-                      ),
-                    ),
-                    Align(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 16),
-                        child: IconButton(
-                          color: Colors.white,
-                          icon: Icon(Icons.flip_camera_android_outlined),
-                          onPressed: _onFlipCamera,
-                        ),
-                      ),
-                      alignment: Alignment.centerRight,
-                    ),
+                    FlipCameraButton(onPressed: _onFlipCamera),
                   ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 ),
-                padding: const EdgeInsets.only(bottom: 50),
+                padding: const EdgeInsets.only(
+                  bottom: 50,
+                  left: 16,
+                  right: 16,
+                ),
               ),
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -111,7 +120,14 @@ class _CameraHairPageState extends State<CameraPage> {
   Future<void> _onCapture() async {
     if (_cameraController != null) {
       final file = await _cameraController!.takePicture();
-      widget.onCapture?.call(File(file.path));
+      setState(() => processing = true);
+      Map<String, dynamic> result = {};
+      if (widget.type == 'hair') {
+        result = await repository.postReportHair(File(file.path));
+      } else if (widget.type == 'skin') {
+        result = await repository.postReportSkin(File(file.path));
+      }
+      widget.onCapture?.call(result);
     }
   }
 
@@ -126,5 +142,11 @@ class _CameraHairPageState extends State<CameraPage> {
     _cameraAspectRatio = _cameraController?.value.aspectRatio ?? 1;
     _cameraAspectRatio = 1 / _cameraAspectRatio;
     setState(() {});
+  }
+
+  Future<void> _onPickFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
   }
 }

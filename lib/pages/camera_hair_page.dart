@@ -9,6 +9,7 @@ class CameraHairPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CameraPage(
+      type: 'hair',
       foreground: DottedBorder(
         child: Container(height: 350),
         borderType: BorderType.RRect,
@@ -17,7 +18,7 @@ class CameraHairPage extends StatelessWidget {
         color: Colors.white,
         strokeWidth: 3,
       ),
-      onCapture: (image) => Get.off(() => ResultHairPage(image)),
+      onCapture: (result) => Get.off(() => ResultHairPage(result)),
     );
   }
 }

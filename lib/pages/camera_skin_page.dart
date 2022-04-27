@@ -9,6 +9,7 @@ class CameraSkinPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CameraPage(
+      type: 'skin',
       foreground: DottedBorder(
         child: Container(height: 350),
         borderType: BorderType.Oval,
@@ -16,7 +17,7 @@ class CameraSkinPage extends StatelessWidget {
         color: Colors.white,
         strokeWidth: 3,
       ),
-      onCapture: (image) => Get.off(() => ResultSkinPage(image)),
+      onCapture: (result) => Get.off(() => ResultSkinPage(result)),
     );
   }
 }

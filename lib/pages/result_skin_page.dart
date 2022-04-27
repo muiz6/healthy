@@ -1,18 +1,17 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+
 import 'package:healthy/widgets/result_page.dart';
 
 class ResultSkinPage extends StatelessWidget {
-  final File image;
+  final Map<String, dynamic> result;
 
-  ResultSkinPage(this.image);
+  ResultSkinPage(this.result);
 
   @override
   Widget build(BuildContext context) {
     return ResultPage(
       type: 'skin',
-      image: image,
+      result: result,
       title: 'Skin Health Score',
     );
   }
