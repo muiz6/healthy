@@ -53,7 +53,7 @@ class ResultPage extends StatelessWidget {
                 imageAssetName: 'assets/img/product.jpg',
                 title: 'Products',
                 subtitle: 'Natural products for better health',
-                onClick: () => Get.to(ProductPage(report['products'])),
+                onClick: () => Get.to(ProductPage(result['products'])),
               ),
               SizedBox(
                 height: dimens.insetM,
