@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:jumping_dot/jumping_dot.dart';
 
+import 'package:healthy/config.dart' as config;
 import 'package:healthy/services/repository.dart' as repository;
 import 'package:healthy/widgets/flip_camera_button.dart';
 
@@ -24,27 +25,34 @@ class _CameraHairPageState extends State<CameraPage> {
   CameraController? _cameraController;
   double _cameraAspectRatio = 1;
   bool processing = false;
+  Size? _camSize;
 
   @override
   void initState() {
-    _onFlipCamera();
+    () async {
+      await Future.delayed(Duration(seconds: 1));
+      _onFlipCamera();
+    }();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
     return Stack(
       children: [
+        Container(color: Colors.black),
         _cameraController != null
-            ? Container(
-                child: AspectRatio(
+            ? UnconstrainedBox(
+                child: SizedBox(
                   child: CameraPreview(_cameraController!),
-                  aspectRatio: _cameraAspectRatio,
+                  height: deviceSize.height /
+                      _cameraAspectRatio *
+                      config.cameraAspectTweak,
+                  width: deviceSize.width,
                 ),
-                color: Colors.black,
-                alignment: Alignment.center,
               )
-            : Container(color: Colors.black),
+            : SizedBox(),
         Scaffold(
           appBar: AppBar(foregroundColor: Colors.white),
           body: Column(
@@ -133,10 +141,14 @@ class _CameraHairPageState extends State<CameraPage> {
     _selectedCamera = (_selectedCamera + 1) % 2;
     final availableCameraList = await availableCameras();
     _cameraController = CameraController(
-        availableCameraList[_selectedCamera], ResolutionPreset.max);
+      availableCameraList[_selectedCamera],
+      ResolutionPreset.max,
+      enableAudio: false,
+    );
     await _cameraController?.initialize();
     _cameraAspectRatio = _cameraController?.value.aspectRatio ?? 1;
     _cameraAspectRatio = 1 / _cameraAspectRatio;
+    _camSize = _cameraController?.value.previewSize;
     setState(() {});
   }
 
