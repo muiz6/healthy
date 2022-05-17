@@ -42,12 +42,12 @@ Future<Map<String, dynamic>> postReportSkin(File imageFile) {
 Future<Map<String, dynamic>> postReport(File imageFile, String type) async {
   final user = await getUser();
   final downloadUrl = await fb_storage.uploadImage(imageFile);
-  final health = await img_processing.postFace(imageFile);
+  final processedReport = await img_processing.postFace2(imageFile);
   final report = await firestore.createReport({
     'userEmail': user!['email'],
     'imageUrl': downloadUrl,
     'type': type,
-    'health': health,
+    'report': processedReport,
   });
   report.addAll({
     'products': await firestore.readProducts(),

@@ -18,6 +18,7 @@ class CameraSkinPage extends StatelessWidget {
         strokeWidth: 3,
       ),
       onCapture: (result) => Get.off(() => ResultSkinPage(result)),
+      message: 'Please place your face in dotted area.',
     );
   }
 }

@@ -19,6 +19,8 @@ class CameraHairPage extends StatelessWidget {
         strokeWidth: 3,
       ),
       onCapture: (result) => Get.off(() => ResultHairPage(result)),
+      message:
+          'Ensure your hair must be inside the dotted area for better scan.',
     );
   }
 }

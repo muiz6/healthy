@@ -3,18 +3,26 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:jumping_dot/jumping_dot.dart';
 
 import 'package:healthy/config.dart' as config;
 import 'package:healthy/services/repository.dart' as repository;
 import 'package:healthy/widgets/flip_camera_button.dart';
+import 'package:healthy/util.dart' as util;
 
 class CameraPage extends StatefulWidget {
   final Widget? foreground;
   final void Function(Map<String, dynamic> result)? onCapture;
   final String type;
+  final String message;
 
-  CameraPage({this.foreground, this.onCapture, required this.type});
+  CameraPage({
+    this.foreground,
+    this.onCapture,
+    required this.type,
+    required this.message,
+  });
 
   @override
   State<CameraPage> createState() => _CameraHairPageState();
@@ -46,9 +54,12 @@ class _CameraHairPageState extends State<CameraPage> {
             ? UnconstrainedBox(
                 child: SizedBox(
                   child: CameraPreview(_cameraController!),
-                  height: deviceSize.height /
-                      _cameraAspectRatio *
-                      config.cameraAspectTweak,
+                  height: _camSize != null
+                      ? _camSize!.width *
+                          deviceSize.width /
+                          _camSize!.height *
+                          config.cameraAspectTweak
+                      : deviceSize.height,
                   width: deviceSize.width,
                 ),
               )
@@ -59,11 +70,14 @@ class _CameraHairPageState extends State<CameraPage> {
             children: [
               Container(
                 child: Text(
-                  processing ? 'Processing...' : 'Message',
+                  processing ? 'Processing...' : widget.message,
                   style: TextStyle(color: Colors.white),
                 ),
                 color: Color(0x88000000),
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -97,7 +111,7 @@ class _CameraHairPageState extends State<CameraPage> {
                                 ),
                               ),
                             ),
-                            onTap: _onCapture,
+                            onTap: () => _onCapture(context),
                           ),
                     FlipCameraButton(onPressed: _onFlipCamera),
                   ],
@@ -126,12 +140,31 @@ class _CameraHairPageState extends State<CameraPage> {
     super.dispose();
   }
 
-  Future<void> _onCapture() async {
+  Future<void> _onCapture(BuildContext context) async {
     if (_cameraController != null) {
       final file = await _cameraController!.takePicture();
       setState(() => processing = true);
-      final result = await _getResult(File(file.path));
-      widget.onCapture?.call(result);
+
+      bool confirmed = false;
+      try {
+        final report = await _getReport(File(file.path));
+
+        if (report['report']['media']['faces'] == null) {
+          confirmed = await util.showYesNoDialog(
+              context, 'No face detected! Do you want to continue?');
+        } else {
+          widget.onCapture?.call(report);
+        }
+      } catch (e) {
+        confirmed = await util.showYesNoDialog(
+            context, 'Check internet connection. Try Again?');
+      }
+
+      if (confirmed!) {
+        setState(() => processing = false);
+      } else {
+        Get.back();
+      }
     }
   }
 
@@ -159,12 +192,12 @@ class _CameraHairPageState extends State<CameraPage> {
     final file = result?.files.first;
     if (file != null) {
       setState(() => processing = true);
-      final result = await _getResult(File(file.path!));
-      widget.onCapture?.call(result);
-    }
+      final report = await _getReport(File(file.path!));
+      widget.onCapture?.call(report);
+    } else {}
   }
 
-  Future<Map<String, dynamic>> _getResult(File imageFile) {
+  Future<Map<String, dynamic>> _getReport(File imageFile) {
     if (widget.type == 'hair') {
       return repository.postReportHair(imageFile);
     }

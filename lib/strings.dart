@@ -1,4 +1,4 @@
-const appName = 'Healthy';
+const appName = 'Facial & Hair Care';
 const createYourAccount = 'Create your account';
 const dontHaveAnAccount = 'Don\'t have an account?';
 const eMail = 'E-mail';
