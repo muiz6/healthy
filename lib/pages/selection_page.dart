@@ -3,11 +3,13 @@ import 'package:get/get.dart';
 
 import 'package:healthy/pages/camera_hair_page.dart';
 import 'package:healthy/pages/camera_skin_page.dart';
+import 'package:healthy/pages/profile_page.dart';
 import 'package:healthy/pages/select_report_page.dart';
 import 'package:healthy/pages/splash_page.dart';
 import 'package:healthy/services/repository.dart' as repository;
 import 'package:healthy/strings.dart' as strings;
 import 'package:healthy/dimens.dart' as dimens;
+import 'package:healthy/util.dart' as util;
 
 class SelectionPage extends StatelessWidget {
   @override
@@ -31,7 +33,24 @@ class SelectionPage extends StatelessWidget {
                       )),
                     ),
                   ),
+                  InkWell(
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 35,
+                          width: 35,
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        Text('Name'),
+                      ],
+                    ),
+                    onTap: () => Get.to(() => ProfilePage()),
+                  ),
                 ],
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
               ),
               Expanded(
                 child: Column(
@@ -110,27 +129,8 @@ class SelectionPage extends StatelessWidget {
   }
 
   Future<void> _onSignOut(BuildContext context) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (builderContext) {
-        return AlertDialog(
-          content: Text('Are you sure you want to sign out?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(builderContext).pop(false),
-              child: Text(
-                'No',
-                style: TextStyle(color: Colors.grey[500]),
-              ),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(builderContext).pop(true),
-              child: Text('Yes'),
-            ),
-          ],
-        );
-      },
-    );
+    final confirmed = await util.showYesNoDialog(
+        context, 'Are you sure you want to sign out?');
     if (confirmed ?? false) {
       await repository.signOut();
       Get.offAll(() => SplashPage());

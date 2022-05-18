@@ -143,28 +143,7 @@ class _CameraHairPageState extends State<CameraPage> {
   Future<void> _onCapture(BuildContext context) async {
     if (_cameraController != null) {
       final file = await _cameraController!.takePicture();
-      setState(() => processing = true);
-
-      bool confirmed = false;
-      try {
-        final report = await _getReport(File(file.path));
-
-        if (report['report']['media']['faces'] == null) {
-          confirmed = await util.showYesNoDialog(
-              context, 'No face detected! Do you want to continue?');
-        } else {
-          widget.onCapture?.call(report);
-        }
-      } catch (e) {
-        confirmed = await util.showYesNoDialog(
-            context, 'Check internet connection. Try Again?');
-      }
-
-      if (confirmed!) {
-        setState(() => processing = false);
-      } else {
-        Get.back();
-      }
+      _processImageFile(file.path);
     }
   }
 
@@ -191,10 +170,8 @@ class _CameraHairPageState extends State<CameraPage> {
     );
     final file = result?.files.first;
     if (file != null) {
-      setState(() => processing = true);
-      final report = await _getReport(File(file.path!));
-      widget.onCapture?.call(report);
-    } else {}
+      _processImageFile(file.path!);
+    }
   }
 
   Future<Map<String, dynamic>> _getReport(File imageFile) {
@@ -205,5 +182,27 @@ class _CameraHairPageState extends State<CameraPage> {
       return repository.postReportSkin(imageFile);
     }
     throw ArgumentError('Invalid Type');
+  }
+
+  Future<void> _processImageFile(String path) async {
+    setState(() => processing = true);
+
+    bool? confirmed = false;
+    try {
+      final report = await _getReport(File(path));
+      widget.onCapture?.call(report);
+    } on FormatException {
+      confirmed = await util.showYesNoDialog(
+          context, 'No face detected! Do you want to continue?');
+    } catch (e) {
+      confirmed = await util.showYesNoDialog(
+          context, 'Check your internet connection. Try Again?');
+    }
+
+    if (confirmed ?? true) {
+      setState(() => processing = false);
+    } else {
+      Get.back();
+    }
   }
 }

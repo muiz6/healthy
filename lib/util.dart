@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Future<bool> showYesNoDialog(BuildContext context, String message) async {
+Future<bool?> showYesNoDialog(BuildContext context, String message) async {
   final confirmed = await showDialog<bool>(
     context: context,
     builder: (builderContext) {
@@ -22,5 +22,5 @@ Future<bool> showYesNoDialog(BuildContext context, String message) async {
       );
     },
   );
-  return confirmed!;
+  return confirmed;
 }
