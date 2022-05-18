@@ -187,22 +187,20 @@ class _CameraHairPageState extends State<CameraPage> {
   Future<void> _processImageFile(String path) async {
     setState(() => processing = true);
 
-    bool? confirmed = false;
     try {
       final report = await _getReport(File(path));
       widget.onCapture?.call(report);
-    } on FormatException {
-      confirmed = await util.showYesNoDialog(
-          context, 'No face detected! Do you want to continue?');
     } catch (e) {
-      confirmed = await util.showYesNoDialog(
-          context, 'Check your internet connection. Try Again?');
-    }
-
-    if (confirmed ?? true) {
-      setState(() => processing = false);
-    } else {
-      Get.back();
+      String msg = 'Check your internet connection. Try again?';
+      if (e is FormatException) {
+        msg = 'No face detected! Do you want to try again?';
+      }
+      final retry = await util.showYesNoDialog(context, msg) ?? true;
+      if (retry) {
+        setState(() => processing = false);
+      } else {
+        Get.back();
+      }
     }
   }
 }

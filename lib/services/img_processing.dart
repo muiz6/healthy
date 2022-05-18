@@ -8,7 +8,7 @@ const _baseUrl = 'https://api.everypixel.com/v1/faces';
 
 final _dio = Dio(BaseOptions(
   connectTimeout: 5000,
-  receiveTimeout: 5000,
+  receiveTimeout: 10000,
   headers: {
     'Authorization': secrets.everyPixelAuth,
   },

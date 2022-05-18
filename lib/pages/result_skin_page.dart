@@ -13,6 +13,11 @@ class ResultSkinPage extends StatelessWidget {
       type: 'skin',
       result: result,
       title: 'Skin Health Score',
+      tags: [
+        'bags under eyes',
+        'double chin',
+        'pale skin',
+      ],
     );
   }
 }

@@ -12,8 +12,14 @@ class ResultPage extends StatelessWidget {
   final String type;
   final Map<String, dynamic> result;
   final String title;
+  final List<String> tags;
 
-  ResultPage({required this.type, required this.result, required this.title});
+  ResultPage({
+    required this.type,
+    required this.result,
+    required this.title,
+    required this.tags,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +36,7 @@ class ResultPage extends StatelessWidget {
                 style: textTheme.headline4,
               ),
               Text(
-                result['health'].toStringAsFixed(2),
+                '0',
                 style: TextStyle(
                   fontSize: 100,
                   fontWeight: FontWeight.w300,
@@ -49,21 +55,7 @@ class ResultPage extends StatelessWidget {
               SizedBox(
                 height: dimens.insetM,
               ),
-              ViewMoreTile(
-                imageAssetName: 'assets/img/product.jpg',
-                title: 'Products',
-                subtitle: 'Natural products for better health',
-                onClick: () => Get.to(ProductPage(result['products'])),
-              ),
-              SizedBox(
-                height: dimens.insetM,
-              ),
-              ViewMoreTile(
-                imageAssetName: 'assets/img/plant.jpg',
-                title: 'Home Remedies',
-                subtitle: 'For the DIY enthusiasts',
-                onClick: () => Get.to(RemedyPage(result['homeRemedies'])),
-              ),
+              //
               SizedBox(
                 height: dimens.insetM,
               ),

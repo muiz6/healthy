@@ -13,6 +13,10 @@ class ResultHairPage extends StatelessWidget {
       title: 'Hair Health Score',
       type: 'hair',
       result: result,
+      tags: [
+        'bald',
+        'receding hairline',
+      ],
     );
   }
 }
