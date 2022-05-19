@@ -2,9 +2,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:get/get.dart';
+import 'package:healthy/pages/result_hair_page.dart';
+import 'package:healthy/pages/result_skin_page.dart';
 
 import 'package:healthy/services/repository.dart' as repository;
 import 'package:healthy/widgets/report_tile.dart';
+import 'package:healthy/widgets/result_page.dart';
 
 class ViewReportPage extends StatefulWidget {
   final String? type;
@@ -67,11 +71,12 @@ class _ViewReportPageState extends State<ViewReportPage> {
                         return Padding(
                           child: ReportTile(
                             imageUrl: report['imageUrl'],
-                            health: report['health'],
+                            health: 0,
                             remarks: report['remarks'] ?? 'n/a',
                             sample: report['type'],
                             deletable: deletable,
                             onDelete: () => onDeleteReport(report['id']),
+                            onClick: () => onClickReport(report),
                           ),
                           padding: EdgeInsets.all(8),
                         );
@@ -118,7 +123,7 @@ class _ViewReportPageState extends State<ViewReportPage> {
                 .entries
                 .map((entry) => FlSpot(
                       entry.key.toDouble(),
-                      entry.value['health'],
+                      0,
                     ))
                 .toList(),
             isCurved: true,
@@ -146,5 +151,13 @@ class _ViewReportPageState extends State<ViewReportPage> {
       reports = await repository.getReports(widget.type);
       setState(() => deletable = true);
     } catch (e) {}
+  }
+
+  void onClickReport(Map<String, dynamic> report) {
+    if (report['type'] == 'hair') {
+      Get.to(() => ResultHairPage(report));
+    } else if (report['type'] == 'skin') {
+      Get.to(() => ResultSkinPage(report));
+    }
   }
 }

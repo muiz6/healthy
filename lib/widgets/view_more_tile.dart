@@ -23,8 +23,8 @@ class ViewMoreTile extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                height: 100,
-                width: 100,
+                height: 70,
+                width: 70,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(imageAssetName),
@@ -36,11 +36,15 @@ class ViewMoreTile extends StatelessWidget {
                 width: dimens.insetM,
               ),
               Expanded(
-                child: Text(
-                  title,
-                  style: Theme.of(context).textTheme.headline3?.copyWith(
-                        fontWeight: FontWeight.normal,
-                      ),
+                child: Column(
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
+                    Text(subtitle),
+                  ],
+                  crossAxisAlignment: CrossAxisAlignment.start,
                 ),
               ),
               Icon(

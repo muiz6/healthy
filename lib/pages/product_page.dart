@@ -15,16 +15,19 @@ class ProductPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(strings.products),
       ),
-      body: ListView.builder(
-        itemCount: products.length,
-        itemBuilder: (_, index) => Padding(
-          padding: const EdgeInsets.all(dimens.insetM),
-          child: MyListTile(
-            imageUrl: products[index]['imageUrl'],
-            title: products[index]['name'],
-          ),
-        ),
-        padding: EdgeInsets.all(dimens.insetM),
+      // body: ListView.builder(
+      //   itemCount: products.length,
+      //   itemBuilder: (_, index) => Padding(
+      //     padding: const EdgeInsets.all(dimens.insetM),
+      //     child: MyListTile(
+      //       imageUrl: products[index]['imageUrl'],
+      //       title: products[index]['name'],
+      //     ),
+      //   ),
+      //   padding: EdgeInsets.all(dimens.insetM),
+      // ),
+      body: ListView(
+        children: [],
       ),
     );
   }
