@@ -59,3 +59,8 @@ Future<Map<String, dynamic>> postReport(File imageFile, String type) async {
   }
   throw FormatException('No face detected!');
 }
+
+Future<void> updateUser(Map<String, dynamic> user) async {
+  await firestore.updateUser(user);
+  await shared_pref.saveUser(user);
+}

@@ -24,6 +24,12 @@ Future<Map<String, dynamic>?> readUser(email) async {
   }
 }
 
+Future<void> updateUser(Map<String, dynamic> user) async {
+  final snapshot = await users.where('email', isEqualTo: user['email']).get();
+  final userDoc = snapshot.docs.first;
+  await userDoc.reference.update(user);
+}
+
 Future<Map<String, dynamic>> createReport(Map<String, dynamic> report) async {
   report.addAll({
     'id': uuid.v1(),

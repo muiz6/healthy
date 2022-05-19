@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:healthy/pages/confirm_password_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -7,61 +9,80 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Profile')),
-      body: ListView(
+      body: Column(
         children: [
-          SizedBox(height: 14),
-          Center(
-            child: Stack(
+          Expanded(
+            child: ListView(
               children: [
-                Container(
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    shape: BoxShape.circle,
+                SizedBox(height: 14),
+                Center(
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      Positioned(
+                        child: IconButton(
+                          icon: Card(
+                            child: Padding(
+                              child: Icon(Icons.edit),
+                              padding: EdgeInsets.all(3),
+                            ),
+                            shape: CircleBorder(),
+                          ),
+                          onPressed: () {},
+                        ),
+                        bottom: -10,
+                        right: -10,
+                      ),
+                    ],
+                    clipBehavior: Clip.none,
                   ),
                 ),
-                Positioned(
-                  child: IconButton(
-                    icon: Card(
-                      child: Padding(
-                        child: Icon(Icons.edit),
-                        padding: EdgeInsets.all(3),
-                      ),
-                      shape: CircleBorder(),
-                    ),
-                    onPressed: () {},
+                SizedBox(height: 50),
+                TextField(
+                  controller: TextEditingController(text: 'Name'),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    label: Text('Name'),
                   ),
-                  bottom: -10,
-                  right: -10,
+                ),
+                SizedBox(height: 16),
+                TextField(
+                  controller: TextEditingController(text: 'Date Of Birth'),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    label: Text('Date Of Birth'),
+                  ),
+                ),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  child: Text('Change Password'),
+                  onPressed: () => Get.to(() => ConfirmPasswordPage()),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
                 ),
               ],
-              clipBehavior: Clip.none,
+              padding: EdgeInsets.all(16),
             ),
           ),
-          SizedBox(height: 50),
-          TextField(
-            controller: TextEditingController(text: 'Name'),
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              label: Text('Name'),
+          Padding(
+            child: ElevatedButton(
+              child: Text('Save Changes'),
+              onPressed: () {},
             ),
-          ),
-          SizedBox(height: 16),
-          TextField(
-            controller: TextEditingController(text: 'Date Of Birth'),
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              label: Text('Date Of Birth'),
-            ),
-          ),
-          SizedBox(height: 16),
-          ElevatedButton(
-            child: Text('Change Password'),
-            onPressed: () {},
+            padding: EdgeInsets.all(16),
           ),
         ],
-        padding: EdgeInsets.all(16),
+        crossAxisAlignment: CrossAxisAlignment.stretch,
       ),
     );
   }

@@ -9,6 +9,7 @@ import 'package:healthy/pages/result_skin_page.dart';
 import 'package:healthy/services/repository.dart' as repository;
 import 'package:healthy/widgets/report_tile.dart';
 import 'package:healthy/widgets/result_page.dart';
+import 'package:healthy/util.dart' as util;
 
 class ViewReportPage extends StatefulWidget {
   final String? type;
@@ -75,7 +76,8 @@ class _ViewReportPageState extends State<ViewReportPage> {
                             remarks: report['remarks'] ?? 'n/a',
                             sample: report['type'],
                             deletable: deletable,
-                            onDelete: () => onDeleteReport(report['id']),
+                            onDelete: () =>
+                                onDeleteReport(context, report['id']),
                             onClick: () => onClickReport(report),
                           ),
                           padding: EdgeInsets.all(8),
@@ -143,12 +145,16 @@ class _ViewReportPageState extends State<ViewReportPage> {
     );
   }
 
-  Future<void> onDeleteReport(String id) async {
+  Future<void> onDeleteReport(BuildContext context, String id) async {
     try {
       setState(() => deletable = false);
-      await repository.deleteReport(id);
-      setState(() => reports = null);
-      reports = await repository.getReports(widget.type);
+      final confirmed = await util.showYesNoDialog(
+          context, 'Do you want to delete this report?');
+      if (confirmed ?? false) {
+        await repository.deleteReport(id);
+        setState(() => reports = null);
+        reports = await repository.getReports(widget.type);
+      }
       setState(() => deletable = true);
     } catch (e) {}
   }

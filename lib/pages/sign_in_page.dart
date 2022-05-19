@@ -23,17 +23,19 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _loading
-          ? Center(child: CircularProgressIndicator())
-          : ScrollableBody(
-              child: Form(
-                child: Column(
-                  children: _buildColumnItems(context),
-                  mainAxisAlignment: MainAxisAlignment.center,
+      body: Builder(
+        builder: (builderContext) => _loading
+            ? Center(child: CircularProgressIndicator())
+            : ScrollableBody(
+                child: Form(
+                  child: Column(
+                    children: _buildColumnItems(builderContext),
+                    mainAxisAlignment: MainAxisAlignment.center,
+                  ),
+                  key: formKey,
                 ),
-                key: formKey,
               ),
-            ),
+      ),
     );
   }
 
@@ -56,13 +58,9 @@ class _SignInPageState extends State<SignInPage> {
       SizedBox(height: 40),
       _signUpMsg(),
       SizedBox(height: 40),
-      Builder(
-        builder: (builderContext) => ElevatedButton(
-          onPressed: () => _onSignIn(builderContext),
-          child: Text(
-            strings.signIn,
-          ),
-        ),
+      ElevatedButton(
+        onPressed: () => _onSignIn(context),
+        child: Text(strings.signIn),
       ),
     ];
   }
@@ -91,7 +89,9 @@ class _SignInPageState extends State<SignInPage> {
           Get.offAll(SelectionPage());
           return;
         }
-      } catch (e) {}
+      } catch (e) {
+        print('');
+      }
       if (!successful) {
         await Future.delayed(Duration(seconds: 1));
         setState(() => _loading = false);

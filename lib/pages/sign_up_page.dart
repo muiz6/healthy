@@ -148,7 +148,7 @@ class _SignUpPageState extends State<SignUpPage> {
           'email': emailCtrl.text,
           'password': pwdCtrl.text,
           'gender': _gender,
-          'dob': _dob,
+          'dob': _dob.millisecondsSinceEpoch,
         });
         if (result != null) {
           successful = true;

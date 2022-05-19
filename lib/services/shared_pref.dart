@@ -1,30 +1,24 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
-const keyUserId = 'userId';
-const keyName = 'name';
-const keyEmail = 'email';
+const keyUser = 'user';
 
 Future<void> saveUser(Map<String, dynamic> user) async {
   final sharedPref = await SharedPreferences.getInstance();
-  sharedPref.setString(keyName, user['name']!);
-  sharedPref.setString(keyEmail, user['email']!);
+  sharedPref.setString(keyUser, jsonEncode(user));
 }
 
 Future<Map<String, dynamic>?> getUser() async {
   final sharedPref = await SharedPreferences.getInstance();
-  final email = sharedPref.getString(keyEmail);
-  if (email != null) {
-    return {
-      'id': sharedPref.getInt(keyUserId),
-      'name': sharedPref.getString(keyName),
-      'email': email,
-    };
+  final user = sharedPref.getString(keyUser);
+  if (user != null) {
+    return jsonDecode(user);
   }
   return null;
 }
 
 Future<void> clearUser() async {
   final sharedPref = await SharedPreferences.getInstance();
-  await sharedPref.remove(keyEmail);
-  await sharedPref.remove(keyName);
+  await sharedPref.remove(keyUser);
 }
