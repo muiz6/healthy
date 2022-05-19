@@ -17,112 +17,101 @@ class SelectionPage extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(dimens.insetL),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  ElevatedButton(
-                    child: Text('Sign Out'),
-                    onPressed: () => _onSignOut(context),
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all(EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 4,
-                      )),
-                    ),
+        child: ListView(
+          children: [
+            Row(
+              children: [
+                ElevatedButton(
+                  child: Text('Sign Out'),
+                  onPressed: () => _onSignOut(context),
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all(EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 4,
+                    )),
                   ),
-                  InkWell(
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 35,
-                          width: 35,
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        Text('Name'),
-                      ],
-                    ),
-                    onTap: () => Get.to(() => ProfilePage()),
-                  ),
-                ],
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    Text(
-                      strings.msgSelect,
-                      style: textTheme.headline3,
-                    ),
-                    SizedBox(
-                      height: dimens.insetL,
-                    ),
-                    InkWell(
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(dimens.insetL),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 85,
-                                width: 85,
-                                child: CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/img/hair.jpg'),
-                                ),
-                              ),
-                              SizedBox(
-                                height: dimens.insetM,
-                              ),
-                              Text(strings.hair),
-                            ],
-                          ),
-                        ),
-                      ),
-                      onTap: () => Get.to(() => CameraHairPage()),
-                    ),
-                    SizedBox(height: dimens.insetL),
-                    InkWell(
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(dimens.insetL),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 85,
-                                width: 85,
-                                child: CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/img/skin.jpg'),
-                                ),
-                              ),
-                              SizedBox(
-                                height: dimens.insetM,
-                              ),
-                              Text(strings.skin),
-                            ],
-                          ),
-                        ),
-                      ),
-                      onTap: () => Get.to(() => CameraSkinPage()),
-                    ),
-                    SizedBox(height: dimens.insetL),
-                    ElevatedButton(
-                      onPressed: () => Get.to(() => SelectReportPage()),
-                      child: Text('View Reports'),
-                    ),
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
                 ),
-              ),
-            ],
-          ),
+                IconButton(
+                  icon: Icon(
+                    Icons.account_circle_outlined,
+                    size: 35,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  onPressed: () => Get.to(() => ProfilePage()),
+                ),
+              ],
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            ),
+            SizedBox(height: 25),
+            Column(
+              children: [
+                Text(
+                  strings.msgSelect,
+                  style: textTheme.headline3,
+                ),
+                SizedBox(
+                  height: dimens.insetL,
+                ),
+                InkWell(
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(dimens.insetL),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 85,
+                            width: 85,
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  AssetImage('assets/img/hair.jpg'),
+                            ),
+                          ),
+                          SizedBox(
+                            height: dimens.insetM,
+                          ),
+                          Text(strings.hair),
+                        ],
+                      ),
+                    ),
+                  ),
+                  onTap: () => Get.to(() => CameraHairPage()),
+                ),
+                SizedBox(height: dimens.insetL),
+                InkWell(
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(dimens.insetL),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 85,
+                            width: 85,
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  AssetImage('assets/img/skin.jpg'),
+                            ),
+                          ),
+                          SizedBox(
+                            height: dimens.insetM,
+                          ),
+                          Text(strings.skin),
+                        ],
+                      ),
+                    ),
+                  ),
+                  onTap: () => Get.to(() => CameraSkinPage()),
+                ),
+                SizedBox(height: dimens.insetL),
+                ElevatedButton(
+                  onPressed: () => Get.to(() => SelectReportPage()),
+                  child: Text('View Reports'),
+                ),
+              ],
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+            ),
+          ],
+          padding: const EdgeInsets.all(dimens.insetL),
         ),
       ),
     );

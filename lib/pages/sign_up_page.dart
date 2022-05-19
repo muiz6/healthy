@@ -8,6 +8,7 @@ import 'package:healthy/services/repository.dart' as repository;
 import 'package:healthy/strings.dart' as strings;
 import 'package:healthy/util/validators.dart' as validators;
 import 'package:healthy/widgets/scrollable_body.dart';
+import 'package:healthy/util.dart' as util;
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -27,7 +28,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   void initState() {
-    _dobController.value = TextEditingValue(text: _format(_dob));
+    _dobController.value = TextEditingValue(text: util.formatDate(_dob));
     super.initState();
   }
 
@@ -166,19 +167,10 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<void> _onPickDate(BuildContext context) async {
-    final date = await showDatePicker(
-      context: context,
-      initialDate: _dob,
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    );
+    final date = await util.showMyDatePicker(context, _dob);
     if (date != null) {
       _dob = date;
-      _dobController.value = TextEditingValue(text: _format(_dob));
+      _dobController.value = TextEditingValue(text: util.formatDate(_dob));
     }
-  }
-
-  String _format(DateTime date) {
-    return '${date.day}-${date.month}-${date.year}';
   }
 }

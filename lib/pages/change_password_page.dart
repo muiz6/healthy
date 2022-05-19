@@ -30,6 +30,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 decoration: InputDecoration(hintText: 'Enter new password'),
                 validator: (v) => validators.validatePassword(v),
                 enabled: !_disabled,
+                obscureText: true,
               ),
               SizedBox(height: 16),
               TextFormField(
@@ -38,11 +39,13 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 validator: (v) =>
                     validators.validateConfirmPassword(v, _pwdCtrl),
                 enabled: !_disabled,
+                obscureText: true,
               ),
               SizedBox(height: 16),
               ElevatedButton(
                 child: Text('Confirm'),
-                onPressed: () => _onChangePassword(builderContext),
+                onPressed:
+                    _disabled ? null : () => _onChangePassword(builderContext),
               ),
             ],
             padding: EdgeInsets.all(16),
@@ -57,13 +60,16 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     if (_formKey.currentState?.validate() ?? false) {
       setState(() => _disabled = true);
       final user = await repository.getUser();
-      user!['password'] = _rePwdCtrl.value.text;
-      await repository.updateUser(user);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Password updated successfully'),
-      ));
-      await Future.delayed(Duration(seconds: 1));
-      Get.back();
+      try {
+        user!['password'] = _rePwdCtrl.value.text;
+        await repository.updateUser(user);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Password updated successfully'),
+          duration: Duration(milliseconds: 900),
+        ));
+        await Future.delayed(Duration(seconds: 1));
+        Get.back();
+      } catch (e) {}
     }
   }
 }

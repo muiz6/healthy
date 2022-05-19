@@ -30,6 +30,7 @@ class _ConfirmPasswordPageState extends State<ConfirmPasswordPage> {
                 decoration: InputDecoration(hintText: 'Enter Password'),
                 validator: (v) => validators.validatePassword(v),
                 enabled: !_disabled,
+                obscureText: true,
               ),
               SizedBox(height: 16),
               ElevatedButton(
