@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:healthy/pages/product_page.dart';
+import 'package:healthy/pages/remedy_page.dart';
 
 class TagTile extends StatelessWidget {
   Map<String, dynamic> tag;
@@ -60,7 +61,7 @@ class TagTile extends StatelessWidget {
             ),
             ElevatedButton(
               child: Text('Remedies'),
-              onPressed: () {},
+              onPressed: () => Get.to(() => RemedyPage([])),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
                     Theme.of(context).colorScheme.secondary),
