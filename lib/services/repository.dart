@@ -28,7 +28,9 @@ Future<void> signOut() async {
 
 Future<List<Map<String, dynamic>>> getReports(String? type) async {
   final user = await getUser();
-  return firestore.readReports(user!['email'], type);
+  final reports = await firestore.readReports(user!['email'], type);
+  reports.forEach((r) async => r.addAll({'health': await _getHealthScore(r)}));
+  return reports;
 }
 
 Future<Map<String, dynamic>> postReportHair(File imageFile) {
@@ -54,6 +56,7 @@ Future<Map<String, dynamic>> postReport(File imageFile, String type) async {
     report.addAll({
       'products': await firestore.readProducts(),
       'homeRemedies': await firestore.readHomeRemedies(),
+      'health': await _getHealthScore(report),
     });
     return report;
   }
@@ -63,4 +66,18 @@ Future<Map<String, dynamic>> postReport(File imageFile, String type) async {
 Future<void> updateUser(Map<String, dynamic> user) async {
   await firestore.updateUser(user);
   await shared_pref.saveUser(user);
+}
+
+Future<double> _getHealthScore(Map<String, dynamic> report) async {
+  final user = (await getUser())!;
+  final age = DateTime.now().year -
+      DateTime.fromMillisecondsSinceEpoch(user['dob']).year;
+  final tags = report['report']['media']['faces'][0]['tags'];
+  final predictedAge =
+      int.parse(tags.firstWhere((t) => t['name'] == 'age')['value']);
+  double health = age / predictedAge * 100;
+  if (health >= 100) {
+    health = 99;
+  }
+  return health;
 }

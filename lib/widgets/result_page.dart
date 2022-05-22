@@ -8,6 +8,7 @@ import 'package:healthy/pages/view_report_page.dart';
 import 'package:healthy/strings.dart' as strings;
 import 'package:healthy/widgets/tag_tile.dart';
 import 'package:healthy/widgets/view_more_tile.dart';
+import 'package:healthy/util.dart' as util;
 
 class ResultPage extends StatelessWidget {
   final String type;
@@ -29,26 +30,39 @@ class ResultPage extends StatelessWidget {
       appBar: AppBar(title: Text(strings.results)),
       body: ListView(
         children: [
+          Text(util.formatDate(DateTime.now())),
+          SizedBox(height: 8),
           Text(
             title,
             style: textTheme.headline4,
           ),
-          Text(
-            '0',
-            style: TextStyle(
-              fontSize: 100,
-              fontWeight: FontWeight.w300,
-            ),
-          ),
-          Text(
-            strings.remarks,
-            style: textTheme.headline4,
-          ),
-          Text(
-            result['remarks'] ?? 'n/a',
-            style: textTheme.headline3?.copyWith(
-              color: Colors.red,
-            ),
+          SizedBox(height: 4),
+          Row(
+            children: [
+              Text(
+                '${result['health']?.toInt()}',
+                style: Theme.of(context).textTheme.headline2?.copyWith(
+                      color: _remarkColor(result['health']),
+                    ),
+              ),
+              SizedBox(width: 8),
+              Text('out of 100'),
+              SizedBox(width: 10),
+              Container(
+                child: Text(
+                  _remarks(result['health']),
+                  style: TextStyle(
+                    color: _remarkColor(result['health']),
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                decoration: BoxDecoration(
+                  color: _remarkColor(result['health']).withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                padding: EdgeInsets.all(8),
+              ),
+            ],
           ),
           SizedBox(
             height: dimens.insetM,
@@ -95,5 +109,25 @@ class ResultPage extends StatelessWidget {
       }
       return SizedBox();
     }).toList();
+  }
+
+  String _remarks(double score) {
+    if (score < 50) {
+      return 'Bad';
+    }
+    if (score < 80) {
+      return 'Good';
+    }
+    return 'Very Good';
+  }
+
+  Color _remarkColor(double score) {
+    if (score < 50) {
+      return Colors.red;
+    }
+    if (score < 80) {
+      return Colors.orange;
+    }
+    return Colors.green;
   }
 }

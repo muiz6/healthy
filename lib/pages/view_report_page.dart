@@ -72,7 +72,7 @@ class _ViewReportPageState extends State<ViewReportPage> {
                         return Padding(
                           child: ReportTile(
                             imageUrl: report['imageUrl'],
-                            health: 0,
+                            health: report['health'],
                             remarks: report['remarks'] ?? 'n/a',
                             sample: report['type'],
                             deletable: deletable,
@@ -125,7 +125,7 @@ class _ViewReportPageState extends State<ViewReportPage> {
                 .entries
                 .map((entry) => FlSpot(
                       entry.key.toDouble(),
-                      0,
+                      entry.value['health'],
                     ))
                 .toList(),
             isCurved: true,
