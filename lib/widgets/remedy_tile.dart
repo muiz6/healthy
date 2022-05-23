@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 
 import 'package:healthy/dimens.dart' as dimens;
+import 'package:url_launcher/url_launcher.dart';
 
 class RemedyTile extends StatelessWidget {
-  String title;
-  String imageUrl;
+  final String title;
+  final String imageUrl;
+  final String description;
+  final List<String> ingredients;
 
   RemedyTile({
     required this.imageUrl,
     required this.title,
+    required this.description,
+    required this.ingredients,
   });
 
   @override
@@ -45,7 +50,28 @@ class RemedyTile extends StatelessWidget {
                     'Ingredients',
                     style: Theme.of(context).textTheme.subtitle2,
                   ),
-                  Text('Lorem ipsum dolor sit amet lorem ipsum dolor sit amet'),
+                  Column(
+                    children: [
+                      ...ingredients.map((i) => Row(
+                            children: [
+                              Padding(
+                                child: Icon(Icons.circle, size: 8),
+                                padding: EdgeInsets.only(top: 5),
+                              ),
+                              SizedBox(width: 3),
+                              Expanded(child: Text(i)),
+                            ],
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                          )),
+                    ],
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    'Description',
+                    style: Theme.of(context).textTheme.subtitle2,
+                  ),
+                  Text(description),
                   SizedBox(height: 10),
                   ElevatedButton(
                     child: Text('View'),
@@ -62,7 +88,7 @@ class RemedyTile extends StatelessWidget {
                     ),
                   ),
                 ],
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
               ),
             ),
           ],

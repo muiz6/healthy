@@ -61,7 +61,7 @@ class TagTile extends StatelessWidget {
             ),
             ElevatedButton(
               child: Text('Remedies'),
-              onPressed: () => Get.to(() => RemedyPage([])),
+              onPressed: () => Get.to(() => RemedyPage(tag['remedies'] ?? [])),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
                     Theme.of(context).colorScheme.secondary),
