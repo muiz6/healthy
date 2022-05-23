@@ -30,7 +30,7 @@ Future<void> signOut() async {
 Future<List<Map<String, dynamic>>> getReports(String? type) async {
   final user = await getUser();
   final reports = await firestore.readReports(user!['email'], type);
-  await _processReports(reports);
+  reports.forEach((r) async => r.addAll({'health': await _getHealthScore(r)}));
   return reports;
 }
 
@@ -99,17 +99,15 @@ Future<void> _processReports(List<Map<String, dynamic>> reports) async {
       'gray hair',
     ];
     tags
-        .where((t) => target.contains(t['name'] && t['value'] == 'yes'))
+        .where((t) => target.contains(t['name']) && t['value'] == 'yes')
         .forEach((t) {
       final relevantProducts =
           products.where((p) => p['category'] == t['name']).toList();
       final relevantRemedies =
-          remedies.where((r) => r['category'] = t['name']).toList();
+          remedies.where((r) => r['category'] == t['name']).toList();
       t.addAll({
-        'products':
-            relevantProducts.sublist(0, min(2, relevantProducts.length)),
-        'remedies':
-            relevantRemedies.sublist(0, min(2, relevantProducts.length)),
+        'products': relevantProducts.take(2).toList(),
+        'remedies': relevantRemedies.take(2).toList(),
       });
     });
   });

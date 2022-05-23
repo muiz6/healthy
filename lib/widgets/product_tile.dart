@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
 import 'package:healthy/dimens.dart' as dimens;
+import 'package:url_launcher/url_launcher.dart';
 
 class ProductTile extends StatelessWidget {
   String title;
   String imageUrl;
+  String link;
 
   ProductTile({
     required this.imageUrl,
     required this.title,
+    required this.link,
   });
 
   @override
@@ -44,7 +47,10 @@ class ProductTile extends StatelessWidget {
                   SizedBox(height: 10),
                   ElevatedButton(
                     child: Text('Buy'),
-                    onPressed: () {},
+                    onPressed: () => launchUrl(
+                      Uri.parse(link),
+                      mode: LaunchMode.externalApplication,
+                    ),
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all(
                         EdgeInsets.symmetric(
