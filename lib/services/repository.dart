@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:healthy/services/shared_pref.dart' as shared_pref;
 import 'package:healthy/services/firestore.dart' as firestore;
@@ -29,7 +30,7 @@ Future<void> signOut() async {
 Future<List<Map<String, dynamic>>> getReports(String? type) async {
   final user = await getUser();
   final reports = await firestore.readReports(user!['email'], type);
-  reports.forEach((r) async => r.addAll({'health': await _getHealthScore(r)}));
+  await _processReports(reports);
   return reports;
 }
 
@@ -56,8 +57,8 @@ Future<Map<String, dynamic>> postReport(File imageFile, String type) async {
     report.addAll({
       'products': await firestore.readProducts(),
       'homeRemedies': await firestore.readHomeRemedies(),
-      'health': await _getHealthScore(report),
     });
+    await _processReports([report]);
     return report;
   }
   throw FormatException('No face detected!');
@@ -80,4 +81,36 @@ Future<double> _getHealthScore(Map<String, dynamic> report) async {
     health = 99;
   }
   return health;
+}
+
+Future<void> _processReports(List<Map<String, dynamic>> reports) async {
+  final products = await firestore.readProducts();
+  final remedies = await firestore.readHomeRemedies();
+
+  reports.forEach((r) async {
+    r.addAll({'health': await _getHealthScore(r)});
+    final tags = r['report']['media']['faces'][0]['tags'];
+    final target = [
+      'bags under eyes',
+      'double chin',
+      'pale skin',
+      'receding hairline',
+      'bald',
+      'gray hair',
+    ];
+    tags
+        .where((t) => target.contains(t['name'] && t['value'] == 'yes'))
+        .forEach((t) {
+      final relevantProducts =
+          products.where((p) => p['category'] == t['name']).toList();
+      final relevantRemedies =
+          remedies.where((r) => r['category'] = t['name']).toList();
+      t.addAll({
+        'products':
+            relevantProducts.sublist(0, min(2, relevantProducts.length)),
+        'remedies':
+            relevantRemedies.sublist(0, min(2, relevantProducts.length)),
+      });
+    });
+  });
 }

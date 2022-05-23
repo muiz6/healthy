@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:healthy/dimens.dart' as dimens;
 import 'package:healthy/pages/product_page.dart';
@@ -67,25 +68,21 @@ class ResultPage extends StatelessWidget {
           SizedBox(
             height: dimens.insetM,
           ),
-          TagTile({
-            'name': 'bags under eyes',
-            'value': 'yes',
-            'confidence': 0.7,
-          }),
-          SizedBox(height: 20),
-          TagTile({
-            'name': 'double chin',
-            'value': 'yes',
-            'confidence': 0.4,
-          }),
-          ...s(),
+          ...symptoms(),
           SizedBox(
             height: dimens.insetM,
           ),
-          ViewMoreTile(
-            imageAssetName: 'assets/img/person.jpg',
-            title: 'Dermatologists',
-            subtitle: 'You need dermatologist for better treatment',
+          InkWell(
+            child: ViewMoreTile(
+              imageAssetName: 'assets/img/person.jpg',
+              title: 'Dermatologists',
+              subtitle: 'You need dermatologist for better treatment',
+            ),
+            onTap: () => launchUrl(
+              Uri.parse(
+                  'https://www.google.com/search?q=dermatologists+near+me'),
+              mode: LaunchMode.externalApplication,
+            ),
           ),
           SizedBox(
             height: dimens.insetL,
@@ -100,15 +97,15 @@ class ResultPage extends StatelessWidget {
     );
   }
 
-  List<Widget> s() {
+  List<Widget> symptoms() {
     final List reportTags = result['report']['media']['faces'][0]['tags'];
-    return tags.map((t) {
-      Map<String, dynamic> tag = reportTags.firstWhere((rt) => rt['name'] == t);
-      if (tag['value'] == 'yes') {
-        TagTile(tag);
-      }
-      return SizedBox();
-    }).toList();
+    return reportTags
+        .where((t) => tags.contains(t['name']) && t['value'] == 'yes')
+        .map((t) => Padding(
+              child: TagTile(t),
+              padding: const EdgeInsets.only(bottom: 8.0),
+            ))
+        .toList();
   }
 
   String _remarks(double score) {
