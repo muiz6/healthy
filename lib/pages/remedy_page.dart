@@ -5,7 +5,7 @@ import 'package:healthy/strings.dart' as strings;
 import 'package:healthy/widgets/remedy_tile.dart';
 
 class RemedyPage extends StatelessWidget {
-  final List<Map<String, dynamic>> homeRemedies;
+  final List<dynamic> homeRemedies;
 
   RemedyPage(this.homeRemedies);
 
@@ -18,7 +18,7 @@ class RemedyPage extends StatelessWidget {
       body: ListView.builder(
         itemCount: homeRemedies.length,
         itemBuilder: (_, index) {
-          final remedy = homeRemedies[index];
+          final Map<String, dynamic> remedy = homeRemedies[index];
           return Padding(
             padding: const EdgeInsets.all(dimens.insetM),
             child: RemedyTile(

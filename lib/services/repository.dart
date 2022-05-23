@@ -48,17 +48,14 @@ Future<Map<String, dynamic>> postReport(File imageFile, String type) async {
   final processedReport = await img_processing.postFace2(imageFile);
   if (processedReport['media']['faces'] != null) {
     final downloadUrl = await fb_storage.uploadImage(imageFile);
-    final report = await firestore.createReport({
+    final report = {
       'userEmail': user!['email'],
       'imageUrl': downloadUrl,
       'type': type,
       'report': processedReport,
-    });
-    report.addAll({
-      'products': await firestore.readProducts(),
-      'homeRemedies': await firestore.readHomeRemedies(),
-    });
+    };
     await _processReports([report]);
+    await firestore.createReport(report);
     return report;
   }
   throw FormatException('No face detected!');
@@ -87,7 +84,8 @@ Future<void> _processReports(List<Map<String, dynamic>> reports) async {
   final products = await firestore.readProducts();
   final remedies = await firestore.readHomeRemedies();
 
-  reports.forEach((r) async {
+  for (int i = 0; i < reports.length; i++) {
+    final r = reports[i];
     r.addAll({'health': await _getHealthScore(r)});
     final tags = r['report']['media']['faces'][0]['tags'];
     final target = [
@@ -110,5 +108,5 @@ Future<void> _processReports(List<Map<String, dynamic>> reports) async {
         'remedies': relevantRemedies.take(2).toList(),
       });
     });
-  });
+  }
 }

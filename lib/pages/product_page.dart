@@ -5,7 +5,7 @@ import 'package:healthy/strings.dart' as strings;
 import 'package:healthy/widgets/product_tile.dart';
 
 class ProductPage extends StatelessWidget {
-  final List<Map<String, dynamic>> products;
+  final List<dynamic> products;
 
   ProductPage(this.products);
 
@@ -17,7 +17,7 @@ class ProductPage extends StatelessWidget {
       ),
       body: ListView.builder(
         itemBuilder: (context, index) {
-          final p = products[index];
+          final Map<String, dynamic> p = products[index];
           return Padding(
             child: ProductTile(
               imageUrl: p['imageUrl'],
