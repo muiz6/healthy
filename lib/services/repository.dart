@@ -8,6 +8,8 @@ import 'package:healthy/services/img_processing.dart' as img_processing;
 
 const getUser = shared_pref.getUser;
 const deleteReport = firestore.deleteReport;
+const getProducts = firestore.readProducts;
+const getHomeRemedies = firestore.readHomeRemedies;
 
 Future<Map<String, dynamic>?> signIn(String email, String password) async {
   final user = await firestore.readUser(email);
@@ -81,8 +83,8 @@ Future<double> _getHealthScore(Map<String, dynamic> report) async {
 }
 
 Future<void> _processReports(List<Map<String, dynamic>> reports) async {
-  final products = await firestore.readProducts();
-  final remedies = await firestore.readHomeRemedies();
+  final products = await firestore.readProducts('');
+  final remedies = await firestore.readHomeRemedies('');
 
   for (int i = 0; i < reports.length; i++) {
     final r = reports[i];

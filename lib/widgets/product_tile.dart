@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:healthy/dimens.dart' as dimens;
-import 'package:url_launcher/url_launcher.dart';
 
 class ProductTile extends StatelessWidget {
   String title;
   String imageUrl;
   String link;
+  String description;
 
   ProductTile({
     required this.imageUrl,
     required this.title,
     required this.link,
+    required this.description,
   });
 
   @override
@@ -43,7 +45,7 @@ class ProductTile extends StatelessWidget {
                     title,
                     style: Theme.of(context).textTheme.headline4,
                   ),
-                  Text('Lorem ipsum dolor sit amet lorem ipsum dolor sit amet'),
+                  Text(description),
                   SizedBox(height: 10),
                   ElevatedButton(
                     child: Text('Buy'),

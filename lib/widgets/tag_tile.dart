@@ -48,7 +48,7 @@ class TagTile extends StatelessWidget {
           children: [
             ElevatedButton(
               child: Text('Products'),
-              onPressed: () => Get.to(() => ProductPage(tag['products'] ?? [])),
+              onPressed: () => Get.to(() => ProductPage(tag['name'])),
               style: ButtonStyle(
                 padding: MaterialStateProperty.all(EdgeInsets.symmetric(
                   horizontal: 8,
@@ -61,7 +61,7 @@ class TagTile extends StatelessWidget {
             ),
             ElevatedButton(
               child: Text('Remedies'),
-              onPressed: () => Get.to(() => RemedyPage(tag['remedies'] ?? [])),
+              onPressed: () => Get.to(() => RemedyPage(tag['name'])),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
                     Theme.of(context).colorScheme.secondary),

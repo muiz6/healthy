@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:healthy/dimens.dart' as dimens;
-import 'package:url_launcher/url_launcher.dart';
 
 class RemedyTile extends StatelessWidget {
   final String title;
   final String imageUrl;
   final String description;
   final List<String> ingredients;
+  final String link;
 
   RemedyTile({
     required this.imageUrl,
     required this.title,
     required this.description,
     required this.ingredients,
+    required this.link,
   });
 
   @override
@@ -75,7 +77,10 @@ class RemedyTile extends StatelessWidget {
                   SizedBox(height: 10),
                   ElevatedButton(
                     child: Text('View'),
-                    onPressed: () {},
+                    onPressed: () => launchUrl(
+                      Uri.parse(link),
+                      mode: LaunchMode.externalApplication,
+                    ),
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all(
                         EdgeInsets.symmetric(

@@ -57,12 +57,12 @@ Future<void> deleteReport(String id) async {
   await snapshot.docs.first.reference.delete();
 }
 
-Future<List<Map<String, dynamic>>> readProducts() async {
-  final snapshot = await _products.get();
+Future<List<Map<String, dynamic>>> readProducts(String tag) async {
+  final snapshot = await _products.where('category', isEqualTo: tag).get();
   return snapshot.docs.map((document) => document.data()).toList();
 }
 
-Future<List<Map<String, dynamic>>> readHomeRemedies() async {
-  final snapshot = await _homeRemedies.get();
+Future<List<Map<String, dynamic>>> readHomeRemedies(String tag) async {
+  final snapshot = await _homeRemedies.where('category', isEqualTo: tag).get();
   return snapshot.docs.map((document) => document.data()).toList();
 }
